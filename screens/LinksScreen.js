@@ -44,6 +44,9 @@ export default class LinksScreen extends React.Component {
        >
         { this.state.places.map(place => (
           <MapView.Marker 
+            ref={mark => place.mark = mark}
+            title = {place.title}
+            description = {place.description}
             key = {place.id}
             coordinate ={{
               latitude:place.latitude,
@@ -62,12 +65,16 @@ export default class LinksScreen extends React.Component {
               ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
               : 0;
 
-              const { latitude, longitude } = this.state.places[place];
+              const { latitude, longitude, mark } = this.state.places[place];
 
               this.mapView.animateToCoordinate({
                 latitude,
                 longitude
-            });
+            }, 1000);
+
+            setTimeout(() =>{
+              mark.showCallout();
+            }, 500);
 
           }}
         >
