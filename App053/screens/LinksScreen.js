@@ -49,7 +49,7 @@ export default class LinksScreen extends React.Component {
         ...this.state.markers,
         {
           coordinate: e.nativeEvent.coordinate,
-          cost: `$${getRandomInt(50, 300)}`
+          cost: '$${getRandomInt(50, 300)}',
         }
       ]
     })
@@ -70,11 +70,15 @@ export default class LinksScreen extends React.Component {
           onPress={this.handlePress}
           style = {styles.MapView}
         >
-          { this.state.markers.map((marker) => {
+          { this.state.markers.map((marker => {
             return (
-              <MapView.Marker {...marker} />
+              <MapView.Marker {...marker} 
+                ref={mark => marker.mark = mark}
+                title = 'Pau'
+                description = {'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
+                />
             )
-          })}
+          }))}
 
           { this.state.places.map(place => (
             <MapView.Marker 
@@ -118,6 +122,7 @@ export default class LinksScreen extends React.Component {
               <Text>{place.title}</Text>
               <Text style={styles.titulo}>Reclamação: </Text>
               <Text>{place.description}</Text>
+             
             </View>
           ))}
 
