@@ -2,39 +2,45 @@ import React from 'react';
 import { ScrollView, StyleSheet, Dimensions, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
 const { height, width } = Dimensions.get('window');
 
 export default class LinksScreen extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
 
     this.state = {
-      markers: []
+
+      markers: [],
+
+      places:[
+        {
+          id: 1,
+          title: 'Av. Vitalina Marcusso, 1400 - Campus Universitario, Ourinhos - SP, 19910-206',
+          description: 'Falta uma rampa de acesso para cadeirantes',
+          latitude:-22.950560,
+          longitude:-49.896220,
+        },
+        {
+          id: 2,
+          title: 'R. Seis, 171 - Jardim das Paineiras, Ourinhos - SP, 19910-247',
+          description: 'Dificil acesso, calçada em péssimo estado, não tem rampas!',
+          latitude:-22.959253,
+          longitude:-49.894393,
+        },
+      ], 
     }
+
     this.handlePress = this.handlePress.bind(this);
   }
 
   static navigationOptions = {
     title: 'Mapa',
-  };
-  
-  state = {
-    places:[
-      {
-        id: 1,
-        title: 'Av. Vitalina Marcusso, 1400 - Campus Universitario, Ourinhos - SP, 19910-206',
-        description: 'Falta uma rampa de acesso para cadeirantes',
-        latitude:-22.950560,
-        longitude:-49.896220,
-      },
-      {
-        id: 2,
-        title: 'R. Seis, 171 - Jardim das Paineiras, Ourinhos - SP, 19910-247',
-        description: 'Dificil acesso, calçada em péssimo estado, não tem rampas!',
-        latitude:-22.959253,
-        longitude:-49.894393,
-      },
-    ], 
   };
 
   handlePress(e) {
@@ -64,21 +70,23 @@ export default class LinksScreen extends React.Component {
           onPress={this.handlePress}
           style = {styles.MapView}
         >
-        { this.state.places.map(place => (
-          <MapView.Marker 
-            ref={mark => place.mark = mark}
-            title = {place.title}
-            description = {place.description}
-            key = {place.id}
-            coordinate ={{
-              latitude:place.latitude,
-              longitude:place.longitude,
-          }}/>
-        ))}  
-        
-        { this.state.markes.map((marker) => {
-          return <Marker {...marker} />
-        })}
+          { this.state.markers.map((marker) => {
+            return (
+              <MapView.Marker {...marker} />
+            )
+          })}
+
+          { this.state.places.map(place => (
+            <MapView.Marker 
+              ref={mark => place.mark = mark}
+              title = {place.title}
+              description = {place.description}
+              key = {place.id}
+              coordinate ={{
+                latitude:place.latitude,
+                longitude:place.longitude,
+              }}/>
+          ))}  
 
        </MapView>
         <ScrollView 
