@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Dimensions, View, Text } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Dimensions, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 function getRandomInt(min, max) {
@@ -53,6 +53,7 @@ export default class LinksScreen extends React.Component {
         }
       ]
     })
+    Alert.alert('Será?!')
   }
 
   render() {
@@ -74,9 +75,10 @@ export default class LinksScreen extends React.Component {
             return (
               <MapView.Marker {...marker} 
                 ref={mark => marker.mark = mark}
-                title = 'Pau'
+                title = 'Nova Reclamação'
                 description = {'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
-                />
+                >
+                </MapView.Marker>
             )
           }))}
 
