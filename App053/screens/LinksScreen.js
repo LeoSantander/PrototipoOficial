@@ -1,14 +1,23 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Dimensions, View, Text } from 'react-native';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 const { height, width } = Dimensions.get('window');
 
 export default class LinksScreen extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      markers: []
+    }
+    this.handlePress = this.handlePress.bind(this);
+  }
+
   static navigationOptions = {
     title: 'Mapa',
   };
-
+  
   state = {
     places:[
       {
@@ -28,6 +37,18 @@ export default class LinksScreen extends React.Component {
     ], 
   };
 
+  handlePress(e) {
+    this.setState({
+      markers: [
+        ...this.state.markers,
+        {
+          coordinate: e.nativeEvent.coordinate,
+          cost: `$${getRandomInt(50, 300)}`
+        }
+      ]
+    })
+  }
+
   render() {
     const { latitude, longitude } = this.state.places[0];
     return (
@@ -40,8 +61,9 @@ export default class LinksScreen extends React.Component {
             latitudeDelta: 0.0142,
             longitudeDelta: 0.0231
           }}
-        style = {styles.MapView}
-       >
+          onPress={this.handlePress}
+          style = {styles.MapView}
+        >
         { this.state.places.map(place => (
           <MapView.Marker 
             ref={mark => place.mark = mark}
@@ -53,6 +75,10 @@ export default class LinksScreen extends React.Component {
               longitude:place.longitude,
           }}/>
         ))}  
+        
+        { this.state.markes.map((marker) => {
+          return <Marker {...marker} />
+        })}
 
        </MapView>
         <ScrollView 
