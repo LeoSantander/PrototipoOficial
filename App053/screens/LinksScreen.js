@@ -1,10 +1,21 @@
 import React from 'react';
-import { Alert, ScrollView, StyleSheet, Dimensions, View, Text } from 'react-native';
+import {
+  Button,
+  Dimensions,  
+  Image, 
+  Modal, 
+  ScrollView, 
+  StyleSheet,
+  Text,
+  TextInput, 
+  TouchableOpacity, 
+  View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import ModalDropdown from 'react-native-modal-dropdown';
 
 function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
+  min =  Math.ceil(min);
+  max =  Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
@@ -16,6 +27,8 @@ export default class LinksScreen extends React.Component {
 
     this.state = {
 
+      Alert_Visibility: false, 
+
       markers: [],
 
       places:[
@@ -26,6 +39,7 @@ export default class LinksScreen extends React.Component {
           latitude:-22.950560,
           longitude:-49.896220,
         },
+
         {
           id: 2,
           title: 'R. Seis, 171 - Jardim das Paineiras, Ourinhos - SP, 19910-247',
@@ -43,6 +57,10 @@ export default class LinksScreen extends React.Component {
     title: 'Mapa',
   };
 
+  showAlertDialog(){
+    this.setState({Alert_Visibility: true});
+  }
+
   handlePress(e) {
     this.setState({
       markers: [
@@ -53,7 +71,7 @@ export default class LinksScreen extends React.Component {
         }
       ]
     })
-    Alert.alert('Será?!')
+    this.showAlertDialog(true);
   }
 
   render() {
@@ -120,13 +138,117 @@ export default class LinksScreen extends React.Component {
         >
           { this.state.places.map(place => (
             <View key={place.id} style={styles.place}>
+            <View style={{margin:10}}>
               <Text style={styles.titulo}>Endereço:</Text>
               <Text>{place.title}</Text>
               <Text style={styles.titulo}>Reclamação: </Text>
               <Text>{place.description}</Text>
-             
+              <View style={{height:10}}></View>
+              <Button
+                small
+                title='Ver Mais' />
+             </View>
             </View>
           ))}
+
+        <Modal
+          visible={this.state.Alert_Visibility}
+          transparent={false}
+          animationType={"fade"}
+          onRequestClose={ () => { this.showAlertDialog(!this.state.Alert_Visibility)} } >
+
+          <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
+            <View style={styles.welcomeContainer}>
+            <Text style={styles.getStartedTextBig}>Nova Reclamação</Text>
+              <Image
+                source={
+                  __DEV__
+                    ? require('../assets/images/mais.png')
+                    : require('../assets/images/robot-prod.png')
+                }
+                style={styles.welcomeImage}
+              />
+            </View>
+            <View style={styles.Topo}>
+              
+
+              <Text style={styles.getStartedText}>
+                Endereço:
+              </Text>
+              <TextInput style={styles.inputText} onChangeText={(endereco) => this.setState({endereco})}
+                value={this.state.endereco}>
+              </TextInput>
+
+              <Text style={styles.getStartedText}>
+                Reclamação: 
+              </Text>
+              <ModalDropdown 
+                defaultValue='Selecione um item...▼' 
+                dropdownStyle={{width:300}}
+                textStyle={{width:'100%',height:40}} 
+                style={styles.inputText} 
+                options={
+                  [
+                    'Problemas em vias', 
+                    'Problemas em calçadas',
+                    'Problemas com placas e demais objetos',
+                    'Problemas com árvores',
+                    'Qualidade de Asfaltos',
+                    'Semáforos',
+                    'Rampas para cadeirantes',
+                    'Passarelas na Rodovia',
+                    'Coberturas nos pontos de ônibus', 
+                    'Lombadas',
+                    'Ausência de equipamento de segurança',
+                    'Ausência de rampa',
+                    'Ausência de saneamento básico',
+                    'Ausência de elevador',
+                    'Ausência de corrimão',
+                    'Ausência de sinalização adequeda',
+                    'Ausência de faixa de pedestres',
+                    'Ausência de sinais sonoros',
+                    'Ausência de ciclovia',
+                    'Ausência de pontos de ônibus'
+
+                  ]
+                }/>
+
+              <Text style={styles.getStartedText}>
+                Detalhes: 
+              </Text>
+              <TextInput style={styles.inputText} onChangeText={(detalhes) => this.setState({detalhes})}
+                value={this.state.detalhes}>
+              </TextInput>
+
+            </View>     
+           
+            <View style={{flexDirection: 'row', height: '10%'}}>
+
+              <TouchableOpacity 
+                  style={styles.buttonStyle}
+                  onPress={() => {
+                    this.setState({Alert_Visibility:false});
+                  }}
+                  activeOpacity={0.7} 
+              >
+                  <Text style={styles.TextStyle}> OK </Text>
+              </TouchableOpacity>
+
+              <View style={{ width: 1, height: '100%', backgroundColor: '#ddd'}} />
+
+              <TouchableOpacity
+                  style={styles.buttonStyle} 
+                  onPress={() => {
+                  this.setState({Alert_Visibility: false});
+                }}
+                  activeOpacity={0.7} 
+              >
+                  <Text style={styles.TextStyle}> CANCELAR </Text>                
+              </TouchableOpacity>
+
+            </View>
+          </View> 
+        </Modal>
 
         </ScrollView>
       </View> 
@@ -161,5 +283,118 @@ const styles = StyleSheet.create({
     maxHeight: 200,
     backgroundColor:'#FFF',
     marginHorizontal: 20,
+    borderRadius:7,
   },
+
+  MainContainer :{
+    flex:1,
+    marginTop:20
+   },
+
+   ButtonContainer :{
+       flex:1,
+       alignItems: 'center',
+       justifyContent:'center',
+       marginTop: 20
+      },
+    
+   Alert_Main_View:{
+     alignItems: 'center',
+     justifyContent: 'center',
+     backgroundColor : '#000', 
+     height: '50%' ,
+     width: '90%',
+     borderWidth: 1,
+     borderColor: '#000',
+     borderRadius:7,
+   },
+
+   Alert_header:{
+       alignItems: 'center',
+       justifyContent: 'center',
+       backgroundColor : "#2471A3", 
+       height: '20%' ,
+       width: '100%',
+       borderWidth: 1,
+       borderColor: '#000',
+     },
+     Text_Header:{
+       fontSize: 25,
+       backgroundColor : "#2471A3",  
+       color: "#000",
+       textAlign: 'center',
+       padding: 10,
+     },
+
+   Alert_Title:{
+     fontSize: 25, 
+     color: "#ddd",
+     textAlign: 'left'
+   },
+   
+   Alert_Message:{
+       fontSize: 20, 
+       color: "#ddd",
+       textAlign: 'center',
+       padding: 10,
+       height: '40%'
+     },
+   
+   buttonStyle: {
+       width: '50%',
+       height: '100%',
+       justifyContent: 'center',
+       alignItems: 'center',
+   },
+      
+   TextStyle:{
+       color:'#000',
+       textAlign:'center',
+       fontSize: 18,
+       marginTop: -5,
+   },
+
+   getStartedTextBig: {
+    fontSize: 25,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'center',
+    marginBottom:20
+  },
+
+  getStartedText: {
+    fontSize: 17,
+    color: 'rgba(96,100,109, 1)',
+    lineHeight: 24,
+    textAlign: 'left'
+  },
+
+  Topo: {
+    alignItems: 'center',
+    marginHorizontal: 50,
+  },
+
+  welcomeContainer: {
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20
+  },
+  
+  welcomeImage: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+    marginTop: 3,
+    marginLeft: -10,
+  },
+
+  inputText:{
+    width:300,
+    height:40, 
+    borderBottomWidth: 2,
+    borderBottomColor:'#ddd',
+    marginBottom:10,
+    backgroundColor: '#eee',
+    borderRadius: 10
+  }
 });
