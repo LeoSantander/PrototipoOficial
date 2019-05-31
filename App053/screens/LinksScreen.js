@@ -12,6 +12,7 @@ import {
   View } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import ModalDropdown from 'react-native-modal-dropdown';
+//import { generateKeyPair } from 'crypto';
 
 function getRandomInt(min, max) {
   min =  Math.ceil(min);
@@ -20,6 +21,12 @@ function getRandomInt(min, max) {
 }
 
 const { height, width } = Dimensions.get('window');
+
+const SCREENHEIGHT = height;
+const SCREENWIDTH = width;
+const ASPECT_RATIO = width / height;
+const LATTITUDE_DELTA = 0.0922;
+const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 export default class LinksScreen extends React.Component {
   constructor(props) {
@@ -74,21 +81,59 @@ export default class LinksScreen extends React.Component {
     this.showAlertDialog(true);
   }
 
+  //ta com erro mas executa normal kkkkkk
+  watchID: ?number = null
+
+  componentDidMount(){
+    navigator.geolocation.getCurrentPosition((position) => {
+      var lat = parseFloat(position.coords.latitude)
+      var long = parseFloat(position.coords.longitude)
+
+      var initialRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: LATTITUDE_DELTA,
+        longitudeDelta: LONGTITUDE_DELTA
+      }
+
+      this.setState({initialPosition: initialRegion})
+      this.setState({markerPosition: initialRegion})
+    },
+    (error) => alert(JSON.stringify(error)),
+    {enableHighAccuracy: true, timeout:20000, maximumAge: 1000})
+
+    this.watchID = navigator.geolocation.watchPosition((position) =>{
+      var lat = parseFloat(position.coords.latitude)
+      var long = parseFloat(position.coords.longitude)
+
+      var lastRegion = {
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: LATTITUDE_DELTA,
+        longitudeDelta: LONGTITUDE_DELTA
+      }
+
+      this.setState({initialPosition: lastRegion})
+      this.setState({markerPosition: lastRegion})
+
+    })
+  }
+
+  componentWillUnmount(){
+    navigator.geolocation.clearWatch(this.watchID)
+  }
+
   render() {
     const { latitude, longitude } = this.state.places[0];
     return (
       <View style ={styles.container}>
         <MapView
           ref={map => this.mapView = map}
-          initialRegion ={{
-            latitude,
-            longitude,
-            latitudeDelta: 0.0142,
-            longitudeDelta: 0.0231
-          }}
+          region ={this.state.initialPosition}
           onPress={this.handlePress}
           style = {styles.MapView}
         >
+
           { this.state.markers.map((marker => {
             return (
               <MapView.Marker {...marker} 
@@ -96,7 +141,7 @@ export default class LinksScreen extends React.Component {
                 title = 'Nova Reclamação'
                 description = {'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
                 >
-                </MapView.Marker>
+              </MapView.Marker>
             )
           }))}
 
@@ -110,7 +155,15 @@ export default class LinksScreen extends React.Component {
                 latitude:place.latitude,
                 longitude:place.longitude,
               }}/>
-          ))}  
+          ))}
+
+          <MapView.Marker
+            coordinate={this.state.markerPosition}
+          >
+            <View style={styles.radius}>
+              <View style={styles.marker} />
+            </View>
+          </MapView.Marker>  
 
        </MapView>
         <ScrollView 
@@ -257,6 +310,28 @@ export default class LinksScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+
+  radius:{
+    height: 50,
+    width: 50,
+    backgroundColor: 'rgba(0,155,155,0.1)',
+    borderRadius: 25,
+    borderColor: 'rgba(0,155,155,0.3)',
+    overflow: 'hidden',
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+
+  marker:{
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: 'white',
+    backgroundColor: 'red'
+  },
+
   titulo:{
     fontSize: 20,
   },
