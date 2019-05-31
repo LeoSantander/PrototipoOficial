@@ -38,6 +38,18 @@ export default class LinksScreen extends React.Component {
 
       markers: [],
 
+      markerPosition:{
+        latitude:0,
+        longitude:0
+      },
+
+      initialPosition:{
+        latitude:0,
+        longitude:0,
+        latitudeDelta:0,
+        longitudeDelta:0
+      },
+
       places:[
         {
           id: 1,
