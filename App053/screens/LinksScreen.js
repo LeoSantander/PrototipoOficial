@@ -38,19 +38,7 @@ export default class LinksScreen extends React.Component {
 
       markers: [],
 
-      markerPosition:{
-        latitude:0,
-        longitude:0
-      },
-
-      initialPosition:{
-        latitude:0,
-        longitude:0,
-        latitudeDelta:0,
-        longitudeDelta:0
-      },
-
-      places:[
+      places: [
         {
           id: 1,
           title: 'Av. Vitalina Marcusso, 1400 - Campus Universitario, Ourinhos - SP, 19910-206',
@@ -58,15 +46,15 @@ export default class LinksScreen extends React.Component {
           latitude:-22.950560,
           longitude:-49.896220,
         },
+      ],
 
-        {
-          id: 2,
-          title: 'R. Seis, 171 - Jardim das Paineiras, Ourinhos - SP, 19910-247',
-          description: 'Dificil acesso, calçada em péssimo estado, não tem rampas!',
-          latitude:-22.959253,
-          longitude:-49.894393,
-        },
-      ], 
+      data:[], 
+    }
+
+    fetchData=async()=>{
+      const response = await fetch('http://192.168.0.109:1348/ocorrencias');
+      const places = response.json();
+      this.setState({data:places})
     }
 
     this.handlePress = this.handlePress.bind(this);
@@ -98,8 +86,8 @@ export default class LinksScreen extends React.Component {
 
   componentDidMount(){
     navigator.geolocation.getCurrentPosition((position) => {
-      var lat = parseFloat(position.coords.latitude)
-      var long = parseFloat(position.coords.longitude)
+      var lat = position.coords.latitude
+      var long = position.coords.longitude
 
       var initialRegion = {
         latitude: lat,
@@ -115,8 +103,8 @@ export default class LinksScreen extends React.Component {
     {enableHighAccuracy: true, timeout:20000, maximumAge: 1000})
 
     this.watchID = navigator.geolocation.watchPosition((position) =>{
-      var lat = parseFloat(position.coords.latitude)
-      var long = parseFloat(position.coords.longitude)
+      var lat = position.coords.latitude
+      var long = position.coords.longitude
 
       var lastRegion = {
         latitude: lat,

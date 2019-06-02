@@ -15,12 +15,26 @@ var con = mysql.createConnection({
     database:'u204053349_tg'
 });
 
-var server = app.listen(4545, function(){
+var server = app.listen(1348, function(){
     var host = server.address().address
     var port = server.address().port
+    console.log("Iniciou");
 });
 
 con.connect(function(error){
     if (error) console.log(error);
     else console.log("connected");
+});
+
+app.get('/ocorrencias', function(req, res){
+    con.query('select * from ocorrencias', function(error, rows, fields){
+          if(error) console.log(error);
+  
+          else{
+              console.log(rows);
+              res.send(rows);
+  
+          }
+  
+  });
 });
