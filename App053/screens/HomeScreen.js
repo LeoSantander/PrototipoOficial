@@ -46,7 +46,10 @@ export default class HomeScreen extends React.Component {
             <Button
               large
               icon={{name: 'map', type: 'font-awesome'}}
-              title='Inidicar uma Irregularidade' />
+              title='Indicar uma Irregularidade' 
+              onPress={() => this.props.navigation.navigate('Buttons')}
+              
+              />
           </View>
           <View style={styles.desc}>
             <Text style={styles.getStartedText}>

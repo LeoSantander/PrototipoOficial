@@ -6,9 +6,18 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import Insert1Screen from '../screens/Insert1Screen';
+import Insert2Screen from '../screens/Insert2Screen';
+import Insert3Screen from '../screens/Insert3Screen';
+import ButtonsScreen from '../screens/ButtonsScreen';
+
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Insert1: Insert1Screen,
+  Insert2: Insert2Screen,
+  Insert3: Insert3Screen,
+  Buttons: ButtonsScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -53,8 +62,10 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+
+
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
+  SettingsStack
 });
