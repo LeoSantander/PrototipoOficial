@@ -7,13 +7,16 @@ import {
   Text,
   View
 } from 'react-native';
-
 import { Button } from 'react-native-elements';
 
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
+  };
+
+  state = {
+    teste:[]
   };
 
   render() {

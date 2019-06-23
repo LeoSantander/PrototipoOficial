@@ -16,6 +16,7 @@
     "expo": "^32.0.0",
     "expo-permissions": "^4.0.0",
     "express": "^4.17.1",
+    "firebase": "^6.2.2",
     "formik": "^1.5.7",
     "mysqli": "^3.0.6",
     "nodemon": "^1.19.1",

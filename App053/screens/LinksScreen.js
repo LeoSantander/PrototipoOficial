@@ -1,22 +1,25 @@
 import React from 'react';
 import {
   Button,
-  Dimensions,  
-  Image, 
-  Modal, 
-  ScrollView, 
+  Dimensions,
+  Image,
+  Modal,
+  ScrollView,
   StyleSheet,
   Text,
-  TextInput, 
-  TouchableOpacity, 
-  View } from 'react-native';
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import ModalDropdown from 'react-native-modal-dropdown';
+import firebase from 'firebase';
 //import { generateKeyPair } from 'crypto';
 
+
 function getRandomInt(min, max) {
-  min =  Math.ceil(min);
-  max =  Math.floor(max);
+  min = Math.ceil(min);
+  max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
@@ -34,27 +37,22 @@ export default class LinksScreen extends React.Component {
 
     this.state = {
 
-      Alert_Visibility: false, 
+      Alert_Visibility: false,
 
       markers: [],
 
-      places: [
-        {
-          id: 1,
-          title: 'Av. Vitalina Marcusso, 1400 - Campus Universitario, Ourinhos - SP, 19910-206',
-          description: 'Falta uma rampa de acesso para cadeirantes',
-          latitude:-22.950560,
-          longitude:-49.896220,
-        },
+      teste: [],
+
+      places: [{
+        id: 1,
+        title: 'Av. Vitalina Marcusso, 1400 - Campus Universitario, Ourinhos - SP, 19910-206',
+        description: 'Falta uma rampa de acesso para cadeirantes',
+        latitude: -22.950560,
+        longitude: -49.896220,
+      },
       ],
 
-      data:[], 
-    }
-
-    fetchData=async()=>{
-      const response = await fetch('http://192.168.0.109:1348/ocorrencias');
-      const places = response.json();
-      this.setState({data:places})
+      data: [],
     }
 
     this.handlePress = this.handlePress.bind(this);
@@ -64,8 +62,8 @@ export default class LinksScreen extends React.Component {
     title: 'Mapa',
   };
 
-  showAlertDialog(){
-    this.setState({Alert_Visibility: true});
+  showAlertDialog() {
+    this.setState({ Alert_Visibility: true });
   }
 
   handlePress(e) {
@@ -82,9 +80,33 @@ export default class LinksScreen extends React.Component {
   }
 
   //ta com erro mas executa normal kkkkkk
-  watchID: ?number = null
+  watchID: ?number = null;
 
-  componentDidMount(){
+  componentWillUnmount() {
+
+    navigator.geolocation.clearWatch(this.watchID)
+  }
+
+
+  componentDidMount() {
+    
+    var firebaseConfig = {
+      apiKey: "AIzaSyD0GlOQKQcpHg7n00ZxbTWmaOfF4rTEomU",
+      authDomain: "trabgrad-66a7f.firebaseapp.com",
+      databaseURL: "https://trabgrad-66a7f.firebaseio.com",
+      projectId: "trabgrad-66a7f",
+      storageBucket: "trabgrad-66a7f.appspot.com",
+      messagingSenderId: "606095334755"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.database().ref('users').on('value', (data) => {
+      console.log(data.toJSON());
+      this.setState({ teste: data.toJSON() });
+      console.log(teste)
+    });
+
     navigator.geolocation.getCurrentPosition((position) => {
       var lat = position.coords.latitude
       var long = position.coords.longitude
@@ -96,13 +118,13 @@ export default class LinksScreen extends React.Component {
         longitudeDelta: LONGTITUDE_DELTA
       }
 
-      this.setState({initialPosition: initialRegion})
-      this.setState({markerPosition: initialRegion})
+      this.setState({ initialPosition: initialRegion })
+      this.setState({ markerPosition: initialRegion })
     },
-    (error) => alert(JSON.stringify(error)),
-    {enableHighAccuracy: true, timeout:20000, maximumAge: 1000})
+      (error) => alert(JSON.stringify(error)),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 })
 
-    this.watchID = navigator.geolocation.watchPosition((position) =>{
+    this.watchID = navigator.geolocation.watchPosition((position) => {
       var lat = position.coords.latitude
       var long = position.coords.longitude
 
@@ -113,48 +135,45 @@ export default class LinksScreen extends React.Component {
         longitudeDelta: LONGTITUDE_DELTA
       }
 
-      this.setState({initialPosition: lastRegion})
-      this.setState({markerPosition: lastRegion})
+      this.setState({ initialPosition: lastRegion })
+      this.setState({ markerPosition: lastRegion })
 
     })
   }
 
-  componentWillUnmount(){
-    navigator.geolocation.clearWatch(this.watchID)
-  }
-
+  
   render() {
     const { latitude, longitude } = this.state.places[0];
     return (
-      <View style ={styles.container}>
+      <View style={styles.container}>
         <MapView
           ref={map => this.mapView = map}
-          region ={this.state.initialPosition}
+          region={this.state.initialPosition}
           onPress={this.handlePress}
-          style = {styles.MapView}
+          style={styles.MapView}
         >
 
-          { this.state.markers.map((marker => {
+          {this.state.markers.map((marker => {
             return (
-              <MapView.Marker {...marker} 
+              <MapView.Marker {...marker}
                 ref={mark => marker.mark = mark}
-                title = 'Nova Reclamação'
-                description = {'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
-                >
+                title='Nova Reclamação'
+                description={'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
+              >
               </MapView.Marker>
             )
           }))}
 
-          { this.state.places.map(place => (
-            <MapView.Marker 
+          {this.state.places.map(place => (
+            <MapView.Marker
               ref={mark => place.mark = mark}
-              title = {place.title}
-              description = {place.description}
-              key = {place.id}
-              coordinate ={{
-                latitude:place.latitude,
-                longitude:place.longitude,
-              }}/>
+              title={place.title}
+              description={place.description}
+              key={place.id}
+              coordinate={{
+                latitude: place.latitude,
+                longitude: place.longitude,
+              }} />
           ))}
 
           <MapView.Marker
@@ -163,155 +182,155 @@ export default class LinksScreen extends React.Component {
             <View style={styles.radius}>
               <View style={styles.marker} />
             </View>
-          </MapView.Marker>  
+          </MapView.Marker>
 
-       </MapView>
-        <ScrollView 
-          style = {styles.placeContainer} 
+        </MapView>
+        <ScrollView
+          style={styles.placeContainer}
           horizontal
-          showsHorizontalScrollIndicator = {false}
+          showsHorizontalScrollIndicator={false}
           pagingEnabled
           onMomentumScrollEnd={(e) => {
             const place = (e.nativeEvent.contentOffset.x > 0)
               ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
               : 0;
 
-              const { latitude, longitude, mark } = this.state.places[place];
+            const { latitude, longitude, mark } = this.state.places[place];
 
-              this.mapView.animateToCoordinate({
-                latitude,
-                longitude
+            this.mapView.animateToCoordinate({
+              latitude,
+              longitude
             }, 1000);
 
-            setTimeout(() =>{
+            setTimeout(() => {
               mark.showCallout();
             }, 500);
 
           }}
         >
-          { this.state.places.map(place => (
+          {this.state.places.map(place => (
             <View key={place.id} style={styles.place}>
-            <View style={{margin:10}}>
-              <Text style={styles.titulo}>Endereço:</Text>
-              <Text>{place.title}</Text>
-              <Text style={styles.titulo}>Reclamação: </Text>
-              <Text>{place.description}</Text>
-              <View style={{height:10}}></View>
-              <Button
-                small
-                title='Ver Mais' />
-             </View>
+              <View style={{ margin: 10 }}>
+                <Text style={styles.titulo}>Endereço:</Text>
+                <Text>{place.title}</Text>
+                <Text style={styles.titulo}>Reclamação: </Text>
+                <Text>{place.description}</Text>
+                <View style={{ height: 10 }}></View>
+                <Button
+                  small
+                  title='Ver Mais' />
+              </View>
             </View>
           ))}
 
-        <Modal
-          visible={this.state.Alert_Visibility}
-          transparent={false}
-          animationType={"fade"}
-          onRequestClose={ () => { this.showAlertDialog(!this.state.Alert_Visibility)} } >
+          <Modal
+            visible={this.state.Alert_Visibility}
+            transparent={false}
+            animationType={"fade"}
+            onRequestClose={() => { this.showAlertDialog(!this.state.Alert_Visibility) }} >
 
-          <View style={{flex:1, alignItems: 'center', justifyContent: 'center'}}>
-            <View style={styles.welcomeContainer}>
-            <Text style={styles.getStartedTextBig}>Nova Reclamação</Text>
-              <Image
-                source={
-                  __DEV__
-                    ? require('../assets/images/mais.png')
-                    : require('../assets/images/robot-prod.png')
-                }
-                style={styles.welcomeImage}
-              />
-            </View>
-            <View style={styles.Topo}>
-              
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={styles.welcomeContainer}>
+                <Text style={styles.getStartedTextBig}>Nova Reclamação</Text>
+                <Image
+                  source={
+                    __DEV__
+                      ? require('../assets/images/mais.png')
+                      : require('../assets/images/robot-prod.png')
+                  }
+                  style={styles.welcomeImage}
+                />
+              </View>
+              <View style={styles.Topo}>
 
-              <Text style={styles.getStartedText}>
-                Endereço:
+
+                <Text style={styles.getStartedText}>
+                  Endereço:
               </Text>
-              <TextInput style={styles.inputText} onChangeText={(endereco) => this.setState({endereco})}
-                value={this.state.endereco}>
-              </TextInput>
+                <TextInput style={styles.inputText} onChangeText={(endereco) => this.setState({ endereco })}
+                  value={this.state.endereco}>
+                </TextInput>
 
-              <Text style={styles.getStartedText}>
-                Reclamação: 
+                <Text style={styles.getStartedText}>
+                  Reclamação:
               </Text>
-              <ModalDropdown 
-                defaultValue='Selecione um item...▼' 
-                dropdownStyle={{width:300}}
-                textStyle={{width:'100%',height:40}} 
-                style={styles.inputText} 
-                options={
-                  [
-                    'Problemas em vias', 
-                    'Problemas em calçadas',
-                    'Problemas com placas e demais objetos',
-                    'Problemas com árvores',
-                    'Qualidade de Asfaltos',
-                    'Semáforos',
-                    'Rampas para cadeirantes',
-                    'Passarelas na Rodovia',
-                    'Coberturas nos pontos de ônibus', 
-                    'Lombadas',
-                    'Ausência de equipamento de segurança',
-                    'Ausência de rampa',
-                    'Ausência de saneamento básico',
-                    'Ausência de elevador',
-                    'Ausência de corrimão',
-                    'Ausência de sinalização adequeda',
-                    'Ausência de faixa de pedestres',
-                    'Ausência de sinais sonoros',
-                    'Ausência de ciclovia',
-                    'Ausência de pontos de ônibus'
+                <ModalDropdown
+                  defaultValue='Selecione um item...▼'
+                  dropdownStyle={{ width: 300 }}
+                  textStyle={{ width: '100%', height: 40 }}
+                  style={styles.inputText}
+                  options={
+                    [
+                      'Problemas em vias',
+                      'Problemas em calçadas',
+                      'Problemas com placas e demais objetos',
+                      'Problemas com árvores',
+                      'Qualidade de Asfaltos',
+                      'Semáforos',
+                      'Rampas para cadeirantes',
+                      'Passarelas na Rodovia',
+                      'Coberturas nos pontos de ônibus',
+                      'Lombadas',
+                      'Ausência de equipamento de segurança',
+                      'Ausência de rampa',
+                      'Ausência de saneamento básico',
+                      'Ausência de elevador',
+                      'Ausência de corrimão',
+                      'Ausência de sinalização adequeda',
+                      'Ausência de faixa de pedestres',
+                      'Ausência de sinais sonoros',
+                      'Ausência de ciclovia',
+                      'Ausência de pontos de ônibus'
 
-                  ]
-                }/>
+                    ]
+                  } />
 
-              <Text style={styles.getStartedText}>
-                Detalhes: 
+                <Text style={styles.getStartedText}>
+                  Detalhes:
               </Text>
-              <TextInput style={styles.inputText} onChangeText={(detalhes) => this.setState({detalhes})}
-                value={this.state.detalhes}>
-              </TextInput>
+                <TextInput style={styles.inputText} onChangeText={(detalhes) => this.setState({ detalhes })}
+                  value={this.state.detalhes}>
+                </TextInput>
 
-            </View>     
-           
-            <View style={{flexDirection: 'row', height: '10%'}}>
+              </View>
 
-              <TouchableOpacity 
+              <View style={{ flexDirection: 'row', height: '10%' }}>
+
+                <TouchableOpacity
                   style={styles.buttonStyle}
                   onPress={() => {
-                    this.setState({Alert_Visibility:false});
+                    this.setState({ Alert_Visibility: false });
                   }}
-                  activeOpacity={0.7} 
-              >
+                  activeOpacity={0.7}
+                >
                   <Text style={styles.TextStyle}> OK </Text>
-              </TouchableOpacity>
+                </TouchableOpacity>
 
-              <View style={{ width: 1, height: '100%', backgroundColor: '#ddd'}} />
+                <View style={{ width: 1, height: '100%', backgroundColor: '#ddd' }} />
 
-              <TouchableOpacity
-                  style={styles.buttonStyle} 
+                <TouchableOpacity
+                  style={styles.buttonStyle}
                   onPress={() => {
-                  this.setState({Alert_Visibility: false});
-                }}
-                  activeOpacity={0.7} 
-              >
-                  <Text style={styles.TextStyle}> CANCELAR </Text>                
-              </TouchableOpacity>
+                    this.setState({ Alert_Visibility: false });
+                  }}
+                  activeOpacity={0.7}
+                >
+                  <Text style={styles.TextStyle}> CANCELAR </Text>
+                </TouchableOpacity>
 
+              </View>
             </View>
-          </View> 
-        </Modal>
+          </Modal>
 
         </ScrollView>
-      </View> 
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
 
-  radius:{
+  radius: {
     height: 50,
     width: 50,
     backgroundColor: 'rgba(0,155,155,0.1)',
@@ -323,7 +342,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
 
-  marker:{
+  marker: {
     height: 20,
     width: 20,
     borderRadius: 10,
@@ -332,7 +351,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'red'
   },
 
-  titulo:{
+  titulo: {
     fontSize: 20,
   },
   container: {
@@ -342,99 +361,99 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignContent: 'flex-end',
   },
-  MapView:{
+  MapView: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0
   },
-  placeContainer:{
-    width:'100%',
+  placeContainer: {
+    width: '100%',
     maxHeight: 200,
   },
-  place:{
+  place: {
     width: width - 40,
     maxHeight: 200,
-    backgroundColor:'#FFF',
+    backgroundColor: '#FFF',
     marginHorizontal: 20,
-    borderRadius:7,
+    borderRadius: 7,
   },
 
-  MainContainer :{
-    flex:1,
-    marginTop:20
-   },
+  MainContainer: {
+    flex: 1,
+    marginTop: 20
+  },
 
-   ButtonContainer :{
-       flex:1,
-       alignItems: 'center',
-       justifyContent:'center',
-       marginTop: 20
-      },
-    
-   Alert_Main_View:{
-     alignItems: 'center',
-     justifyContent: 'center',
-     backgroundColor : '#000', 
-     height: '50%' ,
-     width: '90%',
-     borderWidth: 1,
-     borderColor: '#000',
-     borderRadius:7,
-   },
+  ButtonContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20
+  },
 
-   Alert_header:{
-       alignItems: 'center',
-       justifyContent: 'center',
-       backgroundColor : "#2471A3", 
-       height: '20%' ,
-       width: '100%',
-       borderWidth: 1,
-       borderColor: '#000',
-     },
-     Text_Header:{
-       fontSize: 25,
-       backgroundColor : "#2471A3",  
-       color: "#000",
-       textAlign: 'center',
-       padding: 10,
-     },
+  Alert_Main_View: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000',
+    height: '50%',
+    width: '90%',
+    borderWidth: 1,
+    borderColor: '#000',
+    borderRadius: 7,
+  },
 
-   Alert_Title:{
-     fontSize: 25, 
-     color: "#ddd",
-     textAlign: 'left'
-   },
-   
-   Alert_Message:{
-       fontSize: 20, 
-       color: "#ddd",
-       textAlign: 'center',
-       padding: 10,
-       height: '40%'
-     },
-   
-   buttonStyle: {
-       width: '50%',
-       height: '100%',
-       justifyContent: 'center',
-       alignItems: 'center',
-   },
-      
-   TextStyle:{
-       color:'#000',
-       textAlign:'center',
-       fontSize: 18,
-       marginTop: -5,
-   },
+  Alert_header: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#2471A3",
+    height: '20%',
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  Text_Header: {
+    fontSize: 25,
+    backgroundColor: "#2471A3",
+    color: "#000",
+    textAlign: 'center',
+    padding: 10,
+  },
 
-   getStartedTextBig: {
+  Alert_Title: {
+    fontSize: 25,
+    color: "#ddd",
+    textAlign: 'left'
+  },
+
+  Alert_Message: {
+    fontSize: 20,
+    color: "#ddd",
+    textAlign: 'center',
+    padding: 10,
+    height: '40%'
+  },
+
+  buttonStyle: {
+    width: '50%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  TextStyle: {
+    color: '#000',
+    textAlign: 'center',
+    fontSize: 18,
+    marginTop: -5,
+  },
+
+  getStartedTextBig: {
     fontSize: 25,
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
     textAlign: 'center',
-    marginBottom:20
+    marginBottom: 20
   },
 
   getStartedText: {
@@ -454,7 +473,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20
   },
-  
+
   welcomeImage: {
     width: 50,
     height: 50,
@@ -463,12 +482,12 @@ const styles = StyleSheet.create({
     marginLeft: -10,
   },
 
-  inputText:{
-    width:300,
-    height:40, 
+  inputText: {
+    width: 300,
+    height: 40,
     borderBottomWidth: 2,
-    borderBottomColor:'#ddd',
-    marginBottom:10,
+    borderBottomColor: '#ddd',
+    marginBottom: 10,
     backgroundColor: '#eee',
     borderRadius: 10
   }
