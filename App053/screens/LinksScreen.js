@@ -3,6 +3,7 @@ import {
   Button,
   Dimensions,
   Image,
+  ActivityIndicator,
   Modal,
   ScrollView,
   StyleSheet,
@@ -32,25 +33,36 @@ const LATTITUDE_DELTA = 0.0922;
 const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 export default class LinksScreen extends React.Component {
+  
+  _isMounted = false;
+
   constructor(props) {
     super(props);
+    this.watchID = null;
 
     this.state = {
+
+      isLoading: true,
 
       Alert_Visibility: false,
 
       markers: [],
 
+      markerPosition:{
+        latitude:0,
+        longitude:0
+      },
+
+      initialPosition:{
+        latitude:0,
+        longitude:0,
+        latitudeDelta:0,
+        longitudeDelta:0
+      },
+
       teste: [],
 
-      places: [{
-        id: 1,
-        title: 'Av. Vitalina Marcusso, 1400 - Campus Universitario, Ourinhos - SP, 19910-206',
-        description: 'Falta uma rampa de acesso para cadeirantes',
-        latitude: -22.950560,
-        longitude: -49.896220,
-      },
-      ],
+      places: [],
 
       data: [],
     }
@@ -79,17 +91,20 @@ export default class LinksScreen extends React.Component {
     this.showAlertDialog(true);
   }
 
-  //ta com erro mas executa normal kkkkkk
-  watchID: ?number = null;
+  //watchID: ?number = null;
 
   componentWillUnmount() {
 
+    this._isMounted = false;
     navigator.geolocation.clearWatch(this.watchID)
   }
 
 
   componentDidMount() {
-    
+    var that = this;
+
+    that._isMounted = true;
+
     var firebaseConfig = {
       apiKey: "AIzaSyD0GlOQKQcpHg7n00ZxbTWmaOfF4rTEomU",
       authDomain: "trabgrad-66a7f.firebaseapp.com",
@@ -101,11 +116,29 @@ export default class LinksScreen extends React.Component {
 
     firebase.initializeApp(firebaseConfig);
 
-    firebase.database().ref('users').on('value', (data) => {
-      console.log(data.toJSON());
-      this.setState({ teste: data.toJSON() });
-      console.log(teste)
+    var rootRef = firebase.database().ref();
+
+    var ref = rootRef.child("users");
+    ref.once("value").then(function(snapshot) {
+      var data = snapshot.exportVal();
+      if (that._isMounted) {
+      that.setState({ places: data });
+      that.setState({isLoading:false});
+      }
+      console.log("**Teste: ", that.state.places);
+      //snapshot.forEach(function(childSnapshot) {
+        //var key = childSnapshot.key;
+        //var data = snapshot.exportVal();
+        //console.log("**Data: ",key," - ",childData);
+        //console.log(snapshot.exportVal);
+      //});
     });
+
+    //firebase.database().ref('users').on('value', (data) => {
+      //console.log('**Data:',data.toJSON());
+      //this.setState({ teste: data.val() });
+      //console.log(teste)
+    //});
 
     navigator.geolocation.getCurrentPosition((position) => {
       var lat = position.coords.latitude
@@ -143,13 +176,27 @@ export default class LinksScreen extends React.Component {
 
   
   render() {
-    const { latitude, longitude } = this.state.places[0];
+
+    if(this.state.isLoading){
+      return(
+        <View style={styles.container}>
+          <View style={{flex: 1, padding: 20}}>
+            <ActivityIndicator/>
+          </View>
+        </View>
+      );
+    }
+    else{
+    
+    const array = Object.values(this.state.places);
+    
+    const { latitude, longitude } = array[0];
     return (
       <View style={styles.container}>
         <MapView
           ref={map => this.mapView = map}
           region={this.state.initialPosition}
-          onPress={this.handlePress}
+          onPress={() => this.props.navigation.navigate('Buttons')}
           style={styles.MapView}
         >
 
@@ -164,12 +211,14 @@ export default class LinksScreen extends React.Component {
             )
           }))}
 
-          {this.state.places.map(place => (
+
+          {array.map((place,index) => (
+            
             <MapView.Marker
               ref={mark => place.mark = mark}
               title={place.title}
               description={place.description}
-              key={place.id}
+              key={index}
               coordinate={{
                 latitude: place.latitude,
                 longitude: place.longitude,
@@ -208,17 +257,15 @@ export default class LinksScreen extends React.Component {
 
           }}
         >
-          {this.state.places.map(place => (
-            <View key={place.id} style={styles.place}>
+          {array.map((place,index) => (
+            <View key={index} style={styles.place}>
               <View style={{ margin: 10 }}>
                 <Text style={styles.titulo}>Endereço:</Text>
                 <Text>{place.title}</Text>
                 <Text style={styles.titulo}>Reclamação: </Text>
-                <Text>{place.description}</Text>
+                <Text>{place.latitude} - {place.longitude}</Text>
                 <View style={{ height: 10 }}></View>
-                <Button
-                  small
-                  title='Ver Mais' />
+                
               </View>
             </View>
           ))}
@@ -326,6 +373,7 @@ export default class LinksScreen extends React.Component {
       </View>
     );
   }
+}
 }
 
 const styles = StyleSheet.create({
