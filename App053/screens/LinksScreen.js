@@ -1,22 +1,14 @@
 import React from 'react';
 import {
-  Button,
   Dimensions,
-  Image,
   ActivityIndicator,
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableOpacity,
   View
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import ModalDropdown from 'react-native-modal-dropdown';
 import firebase from 'firebase';
-//import { generateKeyPair } from 'crypto';
-
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -33,7 +25,7 @@ const LATTITUDE_DELTA = 0.0922;
 const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 export default class LinksScreen extends React.Component {
-  
+
   _isMounted = false;
 
   constructor(props) {
@@ -48,16 +40,16 @@ export default class LinksScreen extends React.Component {
 
       markers: [],
 
-      markerPosition:{
-        latitude:0,
-        longitude:0
+      markerPosition: {
+        latitude: 0,
+        longitude: 0
       },
 
-      initialPosition:{
-        latitude:0,
-        longitude:0,
-        latitudeDelta:0,
-        longitudeDelta:0
+      initialPosition: {
+        latitude: 0,
+        longitude: 0,
+        latitudeDelta: 0,
+        longitudeDelta: 0
       },
 
       teste: [],
@@ -74,10 +66,6 @@ export default class LinksScreen extends React.Component {
     title: 'Mapa',
   };
 
-  showAlertDialog() {
-    this.setState({ Alert_Visibility: true });
-  }
-
   handlePress(e) {
     this.setState({
       markers: [
@@ -88,17 +76,14 @@ export default class LinksScreen extends React.Component {
         }
       ]
     })
-    this.showAlertDialog(true);
-  }
 
-  //watchID: ?number = null;
+  }
 
   componentWillUnmount() {
 
     this._isMounted = false;
     navigator.geolocation.clearWatch(this.watchID)
   }
-
 
   componentDidMount() {
     var that = this;
@@ -117,28 +102,23 @@ export default class LinksScreen extends React.Component {
     firebase.initializeApp(firebaseConfig);
 
     var rootRef = firebase.database().ref();
-
     var ref = rootRef.child("users");
-    ref.once("value").then(function(snapshot) {
+    
+    ref.once("value").then(function (snapshot) {
       var data = snapshot.exportVal();
+      
       if (that._isMounted) {
-      that.setState({ places: data });
-      that.setState({isLoading:false});
+        that.setState({ places: data });
+        that.setState({ isLoading: false });
       }
-      console.log("**Teste: ", that.state.places);
+      //console.log("**Teste: ", that.state.places);
       //snapshot.forEach(function(childSnapshot) {
-        //var key = childSnapshot.key;
-        //var data = snapshot.exportVal();
-        //console.log("**Data: ",key," - ",childData);
-        //console.log(snapshot.exportVal);
+      //var key = childSnapshot.key;
+      //var data = snapshot.exportVal();
+      //console.log("**Data: ",key," - ",childData);
+      //console.log(snapshot.exportVal);
       //});
     });
-
-    //firebase.database().ref('users').on('value', (data) => {
-      //console.log('**Data:',data.toJSON());
-      //this.setState({ teste: data.val() });
-      //console.log(teste)
-    //});
 
     navigator.geolocation.getCurrentPosition((position) => {
       var lat = position.coords.latitude
@@ -174,206 +154,105 @@ export default class LinksScreen extends React.Component {
     })
   }
 
-  
+
   render() {
 
-    if(this.state.isLoading){
-      return(
+    if (this.state.isLoading) {
+      return (
         <View style={styles.container}>
-          <View style={{flex: 1, padding: 20}}>
-            <ActivityIndicator/>
+          <View style={{ flex: 1, padding: 20 }}>
+            <ActivityIndicator />
           </View>
         </View>
       );
     }
-    else{
-    
-    const array = Object.values(this.state.places);
-    
-    const { latitude, longitude } = array[0];
-    return (
-      <View style={styles.container}>
-        <MapView
-          ref={map => this.mapView = map}
-          region={this.state.initialPosition}
-          onPress={() => this.props.navigation.navigate('Buttons')}
-          style={styles.MapView}
-        >
 
-          {this.state.markers.map((marker => {
-            return (
-              <MapView.Marker {...marker}
-                ref={mark => marker.mark = mark}
-                title='Nova Reclamação'
-                description={'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
-              >
-              </MapView.Marker>
-            )
-          }))}
+    else {
+      const array = Object.values(this.state.places);
+      const { latitude, longitude } = array[0];
 
-
-          {array.map((place,index) => (
-            
-            <MapView.Marker
-              ref={mark => place.mark = mark}
-              title={place.title}
-              description={place.description}
-              key={index}
-              coordinate={{
-                latitude: place.latitude,
-                longitude: place.longitude,
-              }} />
-          ))}
-
-          <MapView.Marker
-            coordinate={this.state.markerPosition}
+      return (
+        <View style={styles.container}>
+          <MapView
+            ref={map => this.mapView = map}
+            region={this.state.initialPosition}
+            onPress={() => this.props.navigation.navigate('Buttons')}
+            style={styles.MapView}
           >
-            <View style={styles.radius}>
-              <View style={styles.marker} />
-            </View>
-          </MapView.Marker>
 
-        </MapView>
-        <ScrollView
-          style={styles.placeContainer}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          pagingEnabled
-          onMomentumScrollEnd={(e) => {
-            const place = (e.nativeEvent.contentOffset.x > 0)
-              ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
-              : 0;
-
-            const { latitude, longitude, mark } = this.state.places[place];
-
-            this.mapView.animateToCoordinate({
-              latitude,
-              longitude
-            }, 1000);
-
-            setTimeout(() => {
-              mark.showCallout();
-            }, 500);
-
-          }}
-        >
-          {array.map((place,index) => (
-            <View key={index} style={styles.place}>
-              <View style={{ margin: 10 }}>
-                <Text style={styles.titulo}>Endereço:</Text>
-                <Text>{place.title}</Text>
-                <Text style={styles.titulo}>Reclamação: </Text>
-                <Text>{place.latitude} - {place.longitude}</Text>
-                <View style={{ height: 10 }}></View>
-                
-              </View>
-            </View>
-          ))}
-
-          <Modal
-            visible={this.state.Alert_Visibility}
-            transparent={false}
-            animationType={"fade"}
-            onRequestClose={() => { this.showAlertDialog(!this.state.Alert_Visibility) }} >
-
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-              <View style={styles.welcomeContainer}>
-                <Text style={styles.getStartedTextBig}>Nova Reclamação</Text>
-                <Image
-                  source={
-                    __DEV__
-                      ? require('../assets/images/mais.png')
-                      : require('../assets/images/robot-prod.png')
-                  }
-                  style={styles.welcomeImage}
-                />
-              </View>
-              <View style={styles.Topo}>
-
-
-                <Text style={styles.getStartedText}>
-                  Endereço:
-              </Text>
-                <TextInput style={styles.inputText} onChangeText={(endereco) => this.setState({ endereco })}
-                  value={this.state.endereco}>
-                </TextInput>
-
-                <Text style={styles.getStartedText}>
-                  Reclamação:
-              </Text>
-                <ModalDropdown
-                  defaultValue='Selecione um item...▼'
-                  dropdownStyle={{ width: 300 }}
-                  textStyle={{ width: '100%', height: 40 }}
-                  style={styles.inputText}
-                  options={
-                    [
-                      'Problemas em vias',
-                      'Problemas em calçadas',
-                      'Problemas com placas e demais objetos',
-                      'Problemas com árvores',
-                      'Qualidade de Asfaltos',
-                      'Semáforos',
-                      'Rampas para cadeirantes',
-                      'Passarelas na Rodovia',
-                      'Coberturas nos pontos de ônibus',
-                      'Lombadas',
-                      'Ausência de equipamento de segurança',
-                      'Ausência de rampa',
-                      'Ausência de saneamento básico',
-                      'Ausência de elevador',
-                      'Ausência de corrimão',
-                      'Ausência de sinalização adequeda',
-                      'Ausência de faixa de pedestres',
-                      'Ausência de sinais sonoros',
-                      'Ausência de ciclovia',
-                      'Ausência de pontos de ônibus'
-
-                    ]
-                  } />
-
-                <Text style={styles.getStartedText}>
-                  Detalhes:
-              </Text>
-                <TextInput style={styles.inputText} onChangeText={(detalhes) => this.setState({ detalhes })}
-                  value={this.state.detalhes}>
-                </TextInput>
-
-              </View>
-
-              <View style={{ flexDirection: 'row', height: '10%' }}>
-
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  onPress={() => {
-                    this.setState({ Alert_Visibility: false });
-                  }}
-                  activeOpacity={0.7}
+            {this.state.markers.map((marker => {
+              return (
+                <MapView.Marker {...marker}
+                  ref={mark => marker.mark = mark}
+                  title='Nova Reclamação'
+                  description={'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
                 >
-                  <Text style={styles.TextStyle}> OK </Text>
-                </TouchableOpacity>
+                </MapView.Marker>
+              )
+            }))}
 
-                <View style={{ width: 1, height: '100%', backgroundColor: '#ddd' }} />
+            {array.map((place, index) => (
 
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  onPress={() => {
-                    this.setState({ Alert_Visibility: false });
-                  }}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.TextStyle}> CANCELAR </Text>
-                </TouchableOpacity>
+              <MapView.Marker
+                ref={mark => place.mark = mark}
+                title={place.title}
+                description={place.description}
+                key={index}
+                coordinate={{
+                  latitude: place.latitude,
+                  longitude: place.longitude,
+                }} />
+            ))}
 
+            <MapView.Marker
+              coordinate={this.state.markerPosition}
+            >
+              <View style={styles.radius}>
+                <View style={styles.marker} />
               </View>
-            </View>
-          </Modal>
+            </MapView.Marker>
 
-        </ScrollView>
-      </View>
-    );
+          </MapView>
+          <ScrollView
+            style={styles.placeContainer}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            onMomentumScrollEnd={(e) => {
+              const place = (e.nativeEvent.contentOffset.x > 0)
+                ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
+                : 0;
+
+              const { latitude, longitude, mark } = this.state.places[place];
+
+              this.mapView.animateToCoordinate({
+                latitude,
+                longitude
+              }, 1000);
+
+              setTimeout(() => {
+                mark.showCallout();
+              }, 500);
+
+            }}
+          >
+            {array.map((place, index) => (
+              <View key={index} style={styles.place}>
+                <View style={{ margin: 10 }}>
+                  <Text style={styles.titulo}>Endereço:</Text>
+                  <Text>{place.title}</Text>
+                  <Text style={styles.titulo}>Reclamação: </Text>
+                  <Text>{place.latitude} - {place.longitude}</Text>
+                  <View style={{ height: 10 }}></View>
+
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+      );
+    }
   }
-}
 }
 
 const styles = StyleSheet.create({
