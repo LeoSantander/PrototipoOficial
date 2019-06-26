@@ -13,6 +13,7 @@ import {
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Dimensions } from "react-native";
+import firebase from 'firebase';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -41,28 +42,51 @@ const validationSchema = yup.object().shape({
     .string(),
 });
 
-export default class Insert1Screen extends React.Component{
+export default class Insert1Screen extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      local:[{},],
-      tipo:[{},],
+      local: [{},],
+      tipo: [{},],
+      valbd: [],
     }
   }
 
-  render(){
 
-    return(
+  render() {
+
+    return (
       <ScrollView>
-      <SafeAreaView style={{ marginTop: 50 }}>
-        
+        <SafeAreaView style={{ marginTop: 50 }}>
+
           <Text style={styles.welcome}>Nova Reclamação - Calçadas</Text>
           <Formik
             initialValues={{ endereco: '', local: '', numero: '', bairro: '', cep: '', observacao: '', local: '', }}
             onSubmit={(values, actions) => {
-              alert(JSON.stringify(values));
+
+              var that = this;
+
+              that._isMounted = true;
+
+              var firebaseConfig = {
+                apiKey: "AIzaSyD0GlOQKQcpHg7n00ZxbTWmaOfF4rTEomU",
+                authDomain: "trabgrad-66a7f.firebaseapp.com",
+                databaseURL: "https://trabgrad-66a7f.firebaseio.com",
+                projectId: "trabgrad-66a7f",
+                storageBucket: "trabgrad-66a7f.appspot.com",
+                messagingSenderId: "606095334755"
+              };
+
+              firebase.initializeApp(firebaseConfig);
+              
+              var rootRef = firebase.database().ref();
+              
+              //alert(JSON.stringify(values));
+              var ref = rootRef.child("users");
+              ref.push(values);
+
               setTimeout(() => {
                 actions.setSubmitting(false);
               }, 1000);
@@ -125,9 +149,9 @@ export default class Insert1Screen extends React.Component{
                   <Text style={{ marginBottom: 3 }}>Local</Text>
                   <Picker
                     selectedValue={this.state.local}
-                    style={{height: 50, width: width-20}}
+                    style={{ height: 50, width: width - 20 }}
                     onValueChange={(itemValue, itemIndex) =>
-                      this.setState({local: itemValue})
+                      this.setState({ local: itemValue })
                     }>
                     <Picker.Item label="Selecione um local" value="" />
                     <Picker.Item label="Rampas " value="Rampas " />
@@ -149,9 +173,9 @@ export default class Insert1Screen extends React.Component{
                   <Text style={{ marginBottom: 3 }}>Problema</Text>
                   <Picker
                     selectedValue={this.state.tipo}
-                    style={{height: 50, width: width-20}}
+                    style={{ height: 50, width: width - 20 }}
                     onValueChange={(itemValue, itemIndex) =>
-                      this.setState({tipo: itemValue})
+                      this.setState({ tipo: itemValue })
                     }>
                     <Picker.Item label="Selecione um problema" value="" />
                     <Picker.Item label="Ausência " value="Ausência " />
@@ -183,14 +207,14 @@ export default class Insert1Screen extends React.Component{
                 {formikProps.isSubmitting ? (
                   <ActivityIndicator />
                 ) : (
-                  <Button title="Enviar" onPress={formikProps.handleSubmit} />
-                  
-                )}
+                    <Button title="Enviar" onPress={formikProps.handleSubmit} />
+
+                  )}
               </React.Fragment>
             )}
           </Formik>
-          <View style={{height:30}}></View>
-      </SafeAreaView>
+          <View style={{ height: 30 }}></View>
+        </SafeAreaView>
       </ScrollView>
     );
   }
@@ -208,12 +232,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
-  styleForm:{
+  styleForm: {
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
     marginBottom: 3,
-    
+
   }
 });
