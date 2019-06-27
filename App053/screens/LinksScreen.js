@@ -202,8 +202,8 @@ export default class LinksScreen extends React.Component {
 
               <MapView.Marker
                 ref={mark => place.mark = mark}
-                title={place.title}
-                description={place.description}
+                title={place.problema}
+                description={place.observacao}
                 key={index}
                 coordinate={{
                   latitude: place.latitude,
@@ -249,7 +249,7 @@ export default class LinksScreen extends React.Component {
                   <Text style={styles.titulo}>Endereço:</Text>
                   <Text>{place.endereco},{place.numero} {place.bairro} - {place.cep}</Text>
                   <Text style={styles.titulo}>Reclamação: </Text>
-                  <Text>{place.latitude} - {place.longitude}</Text>
+                  <Text>{place.problema} - {place.observacao}</Text>
                   <View style={{ height: 10 }}></View>
 
                 </View>

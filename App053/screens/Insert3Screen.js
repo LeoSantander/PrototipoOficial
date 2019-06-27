@@ -13,6 +13,7 @@ import {
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Dimensions } from "react-native";
+import firebase from 'firebase';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -53,6 +54,9 @@ export default class Insert3Screen extends React.Component{
   }
 
   render(){
+    const { navigation } = this.props;
+    const latitude = navigation.getParam('latitude');
+    const longitude = navigation.getParam('longitude');
 
     return(
       <ScrollView>
@@ -60,17 +64,53 @@ export default class Insert3Screen extends React.Component{
         
           <Text style={styles.welcome}>Nova Reclamação - Prédios</Text>
           <Formik
-            initialValues={{ endereco: '', local: '', numero: '', bairro: '', cep: '', observacao: '', local: '', }}
+            initialValues={{ endereco: '', local: '', latitude: latitude,longitude:longitude,numero: '', bairro: '', cep: '', observacao: '', local: '', }}
             onSubmit={(values, actions) => {
-              alert(JSON.stringify(values));
+
+              var that = this;
+
+              that._isMounted = true;
+              
+              var rootRef = firebase.database().ref();
+                            
+              //alert(JSON.stringify(values));
+              var ref = rootRef.child("users");
+              var contador = 0;
+                            
+              ref.once("value").then(function (snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                  contador++;
+                  //console.log("**Contador: ",contador);
+                });
+
+                ref.child(contador).set(values);
+              });
+              
               setTimeout(() => {
                 actions.setSubmitting(false);
               }, 1000);
+
+              Alert.alert("Obrigado!","Sua reclamação foi adicionada! Agradecemos por colaborar com nossa cidade!");
+              that.props.navigation.navigate('Home');
             }}
             validationSchema={validationSchema}
           >
             {formikProps => (
               <React.Fragment>
+                
+                <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
+                  <Text style={{ marginBottom: 3 }}>Problema:</Text>
+                  <TextInput readOnly 
+                    style={styles.styleForm}
+                    onChangeText={formikProps.handleChange('problema')}
+                    onBlur={formikProps.handleBlur('problema')}
+                    value='Prédios'
+                  />
+                  <Text style={{ color: 'red' }}>
+                    {formikProps.touched.endereco && formikProps.errors.endereco}
+                  </Text>
+                </View>
+
                 <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Endereço</Text>
                   <TextInput
@@ -121,7 +161,7 @@ export default class Insert3Screen extends React.Component{
                   </Text>
                 </View>
 
-                <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
+               {/*  <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Local</Text>
                   <Picker
                     selectedValue={this.state.local}
@@ -160,7 +200,7 @@ export default class Insert3Screen extends React.Component{
                   <Text style={{ color: 'red' }}>
                     {formikProps.touched.tipo && formikProps.errors.tipo}
                   </Text>
-                </View>
+                </View>*/}
 
                 <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Observações:</Text>

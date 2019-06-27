@@ -15,6 +15,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Dimensions } from "react-native";
 import firebase from 'firebase';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 
 var width = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -44,6 +45,11 @@ const validationSchema = yup.object().shape({
   
 });
 
+var radio_props = [
+  {label: 'param1', value: 0 },
+  {label: 'param2', value: 1 }
+];
+
 export default class Insert1Screen extends React.Component {
 
   constructor(props) {
@@ -59,10 +65,6 @@ export default class Insert1Screen extends React.Component {
 
 
   render() {
-    <View>
-                    <Text>Teste: {longitude}</Text>
-                    <Text>Teste: {latitude}</Text>
-    </View>
 
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
@@ -71,11 +73,6 @@ export default class Insert1Screen extends React.Component {
     return (
       <ScrollView>
         <SafeAreaView style={{ marginTop: 50 }}>
-          
-          <View>
-                    <Text>Teste: {longitude}</Text>
-                    <Text>Teste: {latitude}</Text>
-                </View>
 
           <Text style={styles.welcome}>Nova Reclamação - Calçadas</Text>
           <Formik
@@ -112,6 +109,20 @@ export default class Insert1Screen extends React.Component {
           >
             {formikProps => (
               <React.Fragment>
+                
+                <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
+                  <Text style={{ marginBottom: 3 }}>Problema:</Text>
+                  <TextInput readOnly 
+                    style={styles.styleForm}
+                    onChangeText={formikProps.handleChange('problema')}
+                    onBlur={formikProps.handleBlur('problema')}
+                    value='Calçada'
+                  />
+                  <Text style={{ color: 'red' }}>
+                    {formikProps.touched.endereco && formikProps.errors.endereco}
+                  </Text>
+                </View>
+
                 <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Endereço</Text>
                   <TextInput
@@ -162,7 +173,9 @@ export default class Insert1Screen extends React.Component {
                   </Text>
                 </View>
 
-                <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
+                
+
+                {/*  <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Local</Text>
                   <Picker
                     selectedValue={this.state.local}
@@ -184,7 +197,7 @@ export default class Insert1Screen extends React.Component {
                   <Text style={{ color: 'red' }}>
                     {formikProps.touched.local && formikProps.errors.local}
                   </Text>
-                </View>
+                  </View>*
 
                 <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Problema</Text>
@@ -204,7 +217,9 @@ export default class Insert1Screen extends React.Component {
                   <Text style={{ color: 'red' }}>
                     {formikProps.touched.tipo && formikProps.errors.tipo}
                   </Text>
-                </View>
+                  </View>*/}
+
+                  
 
                 <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                   <Text style={{ marginBottom: 3 }}>Observações:</Text>
@@ -219,6 +234,13 @@ export default class Insert1Screen extends React.Component {
                   <Text style={{ color: 'red' }}>
                     {formikProps.touched.observacao && formikProps.errors.observacao}
                   </Text>
+                </View>
+
+                <View>
+                  <RadioForm
+                    radio_props={radio_props}
+                    initial={0}
+                    onPress={(value) => {this.setState({value:value})}}/>
                 </View>
 
                 {formikProps.isSubmitting ? (
