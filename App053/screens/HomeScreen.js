@@ -50,7 +50,7 @@ export default class HomeScreen extends React.Component {
               large
               icon={{name: 'map', type: 'font-awesome'}}
               title='Indicar uma Irregularidade' 
-              onPress={() => this.props.navigation.navigate('Buttons')}
+              onPress={() => this.props.navigation.navigate('Links')}
               
               />
           </View>
@@ -61,7 +61,10 @@ export default class HomeScreen extends React.Component {
             <Button
               large
               icon={{name: 'briefcase', type: 'font-awesome'}}
-              title='Conheça-nos' />
+              title='Conheça-nos' 
+              onPress={() => this.props.navigation.navigate('Settings')}
+              />
+              
           </View>
 
 
