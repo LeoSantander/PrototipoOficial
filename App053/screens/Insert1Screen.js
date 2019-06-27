@@ -22,25 +22,26 @@ var height = Dimensions.get('window').height; //full height
 const validationSchema = yup.object().shape({
   endereco: yup
     .string()
-    .label('Endereço')
-    .required(),
+    .label('Endereço'),
   numero: yup
     .number()
-    .label('Numero')
-    .required(),
+    .label('Numero'),
   bairro: yup
     .string()
-    .label('Bairro')
-    .required(),
+    .label('Bairro'),
   cep: yup
     .string()
-    .label('CEP')
-    .required(),
+    .label('CEP'),
   observacao: yup
     .string()
     .label('Observação'),
   local: yup
     .string(),
+  description: yup 
+    .string(),
+  title: yup 
+    .string(),
+  
 });
 
 export default class Insert1Screen extends React.Component {
@@ -73,27 +74,15 @@ export default class Insert1Screen extends React.Component {
 
           <Text style={styles.welcome}>Nova Reclamação - Calçadas</Text>
           <Formik
-            initialValues={{ endereco: '', local: '', numero: '', bairro: '', cep: '', observacao: '', local: '', }}
+            initialValues={{ endereco: '', local: '', numero: '', bairro: '', cep: '', observacao: '', local: '',latitude: latitude,longitude:longitude,description:'',title:'' }}
             onSubmit={(values, actions) => {
 
               var that = this;
 
               that._isMounted = true;
-
-              var firebaseConfig = {
-                apiKey: "AIzaSyD0GlOQKQcpHg7n00ZxbTWmaOfF4rTEomU",
-                authDomain: "trabgrad-66a7f.firebaseapp.com",
-                databaseURL: "https://trabgrad-66a7f.firebaseio.com",
-                projectId: "trabgrad-66a7f",
-                storageBucket: "trabgrad-66a7f.appspot.com",
-                messagingSenderId: "606095334755"
-              };
-
-              firebase.initializeApp(firebaseConfig);
               
               var rootRef = firebase.database().ref();
-              
-              
+                            
               //alert(JSON.stringify(values));
               var ref = rootRef.child("users");
               var contador = 0;

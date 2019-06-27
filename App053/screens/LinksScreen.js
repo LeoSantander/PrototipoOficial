@@ -88,6 +88,7 @@ export default class LinksScreen extends React.Component {
   componentWillUnmount() {
 
     this._isMounted = false;
+    this.state.isLoading = true;
     navigator.geolocation.clearWatch(this.watchID)
   }
 
@@ -246,7 +247,7 @@ export default class LinksScreen extends React.Component {
               <View key={index} style={styles.place}>
                 <View style={{ margin: 10 }}>
                   <Text style={styles.titulo}>Endereço:</Text>
-                  <Text>{place.title}</Text>
+                  <Text>{place.endereco},{place.numero} {place.bairro} - {place.cep}</Text>
                   <Text style={styles.titulo}>Reclamação: </Text>
                   <Text>{place.latitude} - {place.longitude}</Text>
                   <View style={{ height: 10 }}></View>
