@@ -58,6 +58,14 @@ export default class Insert1Screen extends React.Component {
 
 
   render() {
+    <View>
+                    <Text>Teste: {longitude}</Text>
+                    <Text>Teste: {latitude}</Text>
+    </View>
+
+    const { navigation } = this.props;
+    const latitude = navigation.getParam('latitude');
+    const longitude = navigation.getParam('longitude');
 
     return (
       <ScrollView>

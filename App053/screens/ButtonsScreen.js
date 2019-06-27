@@ -3,10 +3,12 @@ import {
     View,
     ScrollView,
     Text,
-    StyleSheet
+    StyleSheet,
 } from 'react-native';
 
 import { Button } from 'react-native-elements';
+
+
 
 export default class ButtonsScreen extends React.Component{
 
@@ -16,9 +18,15 @@ export default class ButtonsScreen extends React.Component{
           
         }
       }
-
-    render(){
+      
+    
+      render(){
+        const { navigation } = this.props;
+        const latitude = navigation.getParam('latitude');
+        const longitude = navigation.getParam('longitude');
+        
         return(
+            
             <View style={styles.container}>
               <ScrollView>
                 <Text style={styles.welcome}>Onde se encontra o problema?</Text>
@@ -26,7 +34,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'battery', type: 'font-awesome'}}
                         title='Calçadas' 
-                        onPress={() => this.props.navigation.navigate('Insert1')}>
+                        onPress={() => this.props.navigation.navigate('Insert1', {latitude: latitude, longitude: longitude})}>
                     </Button>
                 </View>
 
@@ -44,6 +52,10 @@ export default class ButtonsScreen extends React.Component{
                         title='Prédios' 
                         onPress={() => this.props.navigation.navigate('Insert3')}>
                     </Button>
+                </View>
+                <View>
+                    <Text>Teste: {longitude}</Text>
+                    <Text>Teste: {latitude}</Text>
                 </View>
                 
               </ScrollView>

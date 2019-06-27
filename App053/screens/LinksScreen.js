@@ -26,6 +26,10 @@ const LONGTITUDE_DELTA = LATTITUDE_DELTA * ASPECT_RATIO;
 
 export default class LinksScreen extends React.Component {
 
+  _onPressButton() {
+    Alert.alert('You tapped the button!')
+  }
+
   _isMounted = false;
 
   constructor(props) {
@@ -75,7 +79,9 @@ export default class LinksScreen extends React.Component {
           cost: '$${getRandomInt(50, 300)}',
         }
       ]
-    })
+    });
+
+    this.props.navigation.navigate('Buttons', {latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude})
 
   }
 
@@ -176,7 +182,7 @@ export default class LinksScreen extends React.Component {
           <MapView
             ref={map => this.mapView = map}
             region={this.state.initialPosition}
-            onPress={() => this.props.navigation.navigate('Buttons')}
+            onPress={this.handlePress}
             style={styles.MapView}
           >
 
