@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Alert,
   SafeAreaView,
   TextInput,
   Button,
@@ -48,6 +49,7 @@ export default class Insert1Screen extends React.Component {
     super(props);
 
     this.state = {
+      enviando: true,
       local: [{},],
       tipo: [{},],
       valbd: [],
@@ -83,13 +85,26 @@ export default class Insert1Screen extends React.Component {
               
               var rootRef = firebase.database().ref();
               
+              
               //alert(JSON.stringify(values));
               var ref = rootRef.child("users");
-              ref.push(values);
+              var contador = 0;
+                            
+              ref.once("value").then(function (snapshot) {
+                snapshot.forEach(function(childSnapshot) {
+                  contador++;
+                  //console.log("**Contador: ",contador);
+                });
 
+                ref.child(contador).set(values);
+              });
+              
               setTimeout(() => {
                 actions.setSubmitting(false);
               }, 1000);
+
+              Alert.alert("Obrigado!","Sua reclamação foi adicionada! Agradecemos por colaborar com nossa cidade!");
+              that.props.navigation.navigate('Home');
             }}
             validationSchema={validationSchema}
           >
