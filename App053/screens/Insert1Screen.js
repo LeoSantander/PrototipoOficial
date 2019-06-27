@@ -70,6 +70,11 @@ export default class Insert1Screen extends React.Component {
     return (
       <ScrollView>
         <SafeAreaView style={{ marginTop: 50 }}>
+          
+          <View>
+                    <Text>Teste: {longitude}</Text>
+                    <Text>Teste: {latitude}</Text>
+                </View>
 
           <Text style={styles.welcome}>Nova Reclamação - Calçadas</Text>
           <Formik
