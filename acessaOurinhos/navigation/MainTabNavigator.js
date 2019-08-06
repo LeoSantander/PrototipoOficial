@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import AboutScreen from '../screens/AboutScreen';
 import InsertCalcadaScreen from '../screens/InsertCalcadaScreen';
+import ButtonsScreen from '../screens/ButtonsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -40,6 +41,8 @@ HomeStack.path = '';
 const MapStack = createStackNavigator(
   {
     Mapa: MapScreen,
+    Buttons: ButtonsScreen,
+    CalcadaInsert: InsertCalcadaScreen,
   },
   config
 );
@@ -68,21 +71,6 @@ AboutStack.navigationOptions = {
 };
 
 AboutStack.path = '';
-
-const InsertCalcadaStack = createStackNavigator(
-  {
-    CalcadaInsert: InsertCalcadaScreen,
-  },
-  config
-);
-
-const ButtonsStack = createStackNavigator(
-  {
-    CalcadaInsert: InsertCalcadaScreen,
-  },
-  config
-);
-
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,

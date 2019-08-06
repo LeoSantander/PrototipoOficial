@@ -100,11 +100,6 @@ export default class MapScreen extends React.Component{
 
   componentDidMount(){
 
-    const { navigation } = this.props;
-    this.focusListener = navigation.addListener("didFocus", () => {
-      this.forceUpdate();
-    });
-
     var that = this;
 
     that._isMounted = true;
@@ -144,8 +139,7 @@ export default class MapScreen extends React.Component{
         }
       ]
     });
-
-    //this.props.navigation.navigate('Buttons', {latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude})
+    this.props.navigation.navigate('Buttons', {latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude})
 
   }
 
@@ -179,16 +173,17 @@ export default class MapScreen extends React.Component{
             style={styles.MapView}
           >
 
-            {this.state.markers.map((marker => {
+            {this.state.markers.map((marker, index) => {
               return (
                 <MapView.Marker {...marker}
                   ref={mark => marker.mark = mark}
                   title='Nova Reclamação'
+                  key = {index}
                   description={'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
                 >
                 </MapView.Marker>
               )
-            }))}
+            })}
 
             {array.map((place, index) => (
 
