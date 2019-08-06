@@ -8,6 +8,7 @@ import {
   View
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import * as Permissions from 'expo-permissions';
 import firebase from 'firebase';
 
 function getRandomInt(min, max) {
@@ -48,6 +49,8 @@ export default class LinksScreen extends React.Component {
         latitude: -22.9774643,
         longitude: -49.8708041
       },
+
+      temLocationPermission: null,
 
       initialPosition: {
         latitude: 0,
@@ -92,7 +95,11 @@ export default class LinksScreen extends React.Component {
     navigator.geolocation.clearWatch(this.watchID)
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ temLocationPermission: status === 'granted' });
+  
     var that = this;
 
     that._isMounted = true;
