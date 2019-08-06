@@ -10,6 +10,7 @@ import Insert1Screen from '../screens/Insert1Screen';
 import Insert2Screen from '../screens/Insert2Screen';
 import Insert3Screen from '../screens/Insert3Screen';
 import ButtonsScreen from '../screens/ButtonsScreen';
+import teste from '../screens/teste'
 
 
 const HomeStack = createStackNavigator({
@@ -65,9 +66,14 @@ const MapsStack = createStackNavigator({
   Buttons: ButtonsScreen,
   });
 
+const Testando = createStackNavigator({
+  EsteTeste: teste,
+}); 
+
 
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
+  Testando,
 });
