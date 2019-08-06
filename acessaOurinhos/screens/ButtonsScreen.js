@@ -34,7 +34,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'arrow-up', type: 'font-awesome'}}
                         title='Calçadas' 
-                        onPress={() => this.props.navigation.navigate('Insert1', {latitude: latitude, longitude: longitude})}>
+                        onPress={() => this.props.navigation.navigate('CalcadaInsert', {latitude: latitude, longitude: longitude})}>
                     </Button>
                 </View>
 
