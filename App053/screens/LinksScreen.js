@@ -45,8 +45,8 @@ export default class LinksScreen extends React.Component {
       markers: [],
 
       markerPosition: {
-        latitude: 0,
-        longitude: 0
+        latitude: -22.9774643,
+        longitude: -49.8708041
       },
 
       initialPosition: {
