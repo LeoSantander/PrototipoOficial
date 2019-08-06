@@ -14,10 +14,6 @@ import ButtonsScreen from '../screens/ButtonsScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  Insert1: Insert1Screen,
-  Insert2: Insert2Screen,
-  Insert3: Insert3Screen,
-  Buttons: ButtonsScreen,
 });
 
 HomeStack.navigationOptions = {
@@ -62,10 +58,16 @@ SettingsStack.navigationOptions = {
   ),
 };
 
+const MapsStack = createStackNavigator({
+  Insert1: Insert1Screen,
+  Insert2: Insert2Screen,
+  Insert3: Insert3Screen,
+  Buttons: ButtonsScreen,
+  });
 
 
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack
+  SettingsStack,
 });

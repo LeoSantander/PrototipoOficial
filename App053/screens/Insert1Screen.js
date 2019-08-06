@@ -120,7 +120,7 @@ export default class Insert1Screen extends React.Component {
                              
 
                 {/* 
-                
+
                   Picker do problema
 
                   Picker do detalhamento do problema! 

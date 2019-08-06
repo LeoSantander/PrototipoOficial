@@ -8,7 +8,6 @@ import {
   View
 } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
-import * as Permissions from 'expo-permissions';
 import firebase from 'firebase';
 
 function getRandomInt(min, max) {
@@ -97,9 +96,6 @@ export default class LinksScreen extends React.Component {
 
   async componentDidMount() {
 
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ temLocationPermission: status === 'granted' });
-  
     var that = this;
 
     that._isMounted = true;
