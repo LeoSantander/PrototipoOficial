@@ -25,19 +25,19 @@ const { height, width } = Dimensions.get('window');
 const SCREENHEIGHT = height;
 const SCREENWIDTH = width;
 const ASPECT_RATIO = width / height;
-const LATTITUDE_DELTA = 0.01;
-const LONGTITUDE_DELTA = 0.0421;
+const LATITUDE_DELTA = 0.0922;
+const LONGTITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class MapScreen extends React.Component{
 
   _isMounted = false;
-  isLoading = true;
 
   constructor(props) {
     super(props);
     this.watchID = null;
 
     this.state = {
+      isLoading: true,
       refreshing: false,
       location: null,
       errorMessage: null,
@@ -66,12 +66,12 @@ export default class MapScreen extends React.Component{
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
       this.setState({
-        errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+        errorMessage: 'Isso não Funciona no Emulador, Por favor, executar no seu Dispositvo Móvel!',
       });
     } else {
       this._getLocationAsync();
     }
-   isLoading = true;
+   this.state.isLoading = true;
   }
 
   _getLocationAsync = async () => {
@@ -90,7 +90,7 @@ export default class MapScreen extends React.Component{
       var initialRegion = {
         latitude: lat,
         longitude: long,
-        latitudeDelta: LATTITUDE_DELTA,
+        latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGTITUDE_DELTA
       }
 
@@ -123,7 +123,7 @@ export default class MapScreen extends React.Component{
       
       if (that._isMounted) {
         that.setState({ places: data });
-        isLoading = false;
+        that.setState({isLoading: false});
       }
     });
     
@@ -150,7 +150,7 @@ export default class MapScreen extends React.Component{
   }
 
   render(){
-    if (isLoading) {
+    if (this.state.isLoading) {
       return (
         <View style={styles.container}>
           <View style={{ flex: 1, padding: 20 }}>

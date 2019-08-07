@@ -8,6 +8,8 @@ import MapScreen from '../screens/MapScreen';
 import AboutScreen from '../screens/AboutScreen';
 import InsertCalcadaScreen from '../screens/InsertCalcadaScreen';
 import ButtonsScreen from '../screens/ButtonsScreen';
+import CaptureScreen from '../screens/CaptureScreen';
+import ExibeImagemScreen from '../screens/ExibeImagemScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -43,6 +45,8 @@ const MapStack = createStackNavigator(
     Mapa: MapScreen,
     Buttons: ButtonsScreen,
     CalcadaInsert: InsertCalcadaScreen,
+    Capture: CaptureScreen,
+    ExibeImagem: ExibeImagemScreen,
   },
   config
 );

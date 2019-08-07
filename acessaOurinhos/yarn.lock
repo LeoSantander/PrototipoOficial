@@ -2807,6 +2807,14 @@ expo-asset@^6.0.0, expo-asset@~6.0.0:
     path-browserify "^1.0.0"
     url-parse "^1.4.4"
 
+expo-camera@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/expo-camera/-/expo-camera-6.0.0.tgz#74db78874f87de7adcd63db0e96591c331fefd28"
+  integrity sha512-/yI/w2wumKVzRfiyTj84+WkRjO2srJyApjN2yFQwIIo+SncOUp5268ao2UKu4zsl3xdj6WQ7ZJeThOX/C75WRQ==
+  dependencies:
+    lodash "^4.6.0"
+    prop-types "^15.6.0"
+
 expo-constants@6.0.0, expo-constants@~6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-6.0.0.tgz#ff4598985ba006e24949be3f05be7429e5bedacf"
@@ -5988,6 +5996,13 @@ react-native-branch@~3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-3.0.1.tgz#5b07b61cbd290168cd3c3662e017ebe0f356d2ca"
   integrity sha512-vbcYxPZlpF5f39GAEUF8kuGQqCNeD3E6zEdvtOq8oCGZunHXlWlKgAS6dgBKCvsHvXgHuMtpvs39VgOp8DaKig==
+
+react-native-camera@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.0.1.tgz#7d9724036e365f5e00176a6b7308d7501bb465b4"
+  integrity sha512-d84vPWMSN1cOnpz2qNiOlcpQFhxBQmDpl4JZPweu4v0nmonDcfm0t+DWgYqMezZQ+u/oyNLTCjdu9D+mKSkPfA==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-elements@^1.1.0:
   version "1.1.0"
