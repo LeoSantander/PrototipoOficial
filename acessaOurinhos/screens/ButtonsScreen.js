@@ -42,7 +42,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'road', type: 'font-awesome'}}
                         title='Ruas' 
-                        onPress={() => this.props.navigation.navigate('Insert2', {latitude: latitude, longitude: longitude})}>
+                        onPress={() => this.props.navigation.navigate('RuaInsert', {latitude: latitude, longitude: longitude})}>
                     </Button>
                 </View>
 
@@ -50,7 +50,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'building', type: 'font-awesome'}}
                         title='Prédios' 
-                        onPress={() => this.props.navigation.navigate('Insert3', {latitude: latitude, longitude: longitude})}>
+                        onPress={() => this.props.navigation.navigate('PredioInsert', {latitude: latitude, longitude: longitude})}>
                     </Button>
                 </View>
                 

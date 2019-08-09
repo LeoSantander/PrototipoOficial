@@ -7,6 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import AboutScreen from '../screens/AboutScreen';
 import InsertCalcadaScreen from '../screens/InsertCalcadaScreen';
+import InsertRuaScreen from '../screens/InsertRuaScreen';
+import InsertPredioScreen from '../screens/InsertPredioScreen';
 import ButtonsScreen from '../screens/ButtonsScreen';
 import CaptureScreen from '../screens/CaptureScreen';
 import ExibeImagemScreen from '../screens/ExibeImagemScreen';
@@ -45,6 +47,8 @@ const MapStack = createStackNavigator(
     Mapa: MapScreen,
     Buttons: ButtonsScreen,
     CalcadaInsert: InsertCalcadaScreen,
+    RuaInsert: InsertRuaScreen,
+    PredioInsert: InsertPredioScreen,
     Capture: CaptureScreen,
     ExibeImagem: ExibeImagemScreen,
   },

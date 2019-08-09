@@ -34,22 +34,7 @@ const validationSchema = yup.object().shape({
 
 });
 
-const pickerArvores = [
-  {
-    title: 'Ausência',
-    value: 'Ausência'
-  },
-  {
-    title: 'Falta de conservação',
-    value: 'Falta de conservação'
-  },
-  {
-    title: 'Irregularidades',
-    value: 'Irregularidades'
-  },
-]
-
-const pickerCobertura = [
+const pickerEscadas = [
   {
     title: 'Ausência',
     value: 'Ausência'
@@ -79,21 +64,6 @@ const pickerIluminacao = [
   },
 ]
 
-const pickerObstaculos = [
-  {
-    title: 'Desníveis ou degraus na calçada',
-    value: 'Desníveis ou degraus na calçada'
-  },
-  {
-    title: 'Buracos na calçada',
-    value: 'Buracos na calçada'
-  },
-  {
-    title: 'Placas, lixeiras, postes e outros em locais inadequados na calçada',
-    value: 'Placas, lixeiras, postes e outros em locais inadequados na calçada'
-  },
-]
-
 const pickerPiso = [
   {
     title: 'Ausência',
@@ -110,21 +80,6 @@ const pickerPiso = [
 ]
 
 const pickerPlacas = [
-  {
-    title: 'Ausência',
-    value: 'Ausência'
-  },
-  {
-    title: 'Falta de conservação',
-    value: 'Falta de conservação'
-  },
-  {
-    title: 'Irregularidades',
-    value: 'Irregularidades'
-  },
-]
-
-const pickerPontos = [
   {
     title: 'Ausência',
     value: 'Ausência'
@@ -169,7 +124,7 @@ const pickerSinalizacao = [
   },
 ]
 
-export default class InsertCalcadaScreen extends React.Component {
+export default class InsertPredioScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -207,33 +162,21 @@ export default class InsertCalcadaScreen extends React.Component {
 
   mudaPicker(valor) {
 
-    if (valor == 'Árvores') {
+    if (valor == 'Escadas e elevadores') {
       this.setState({
-        teste: pickerArvores
-      })
-    } else if (valor == 'Cobertura nos pontos de ônibus') {
-      this.setState({
-        teste: pickerCobertura
+        teste: pickerEscadas
       })
     } else if (valor == 'Iluminação pública') {
       this.setState({
         teste: pickerIluminacao
       })
-    } else if (valor == 'Obstáculos') {
-      this.setState({
-        teste: pickerObstaculos
-      })
     } else if (valor == 'Piso') {
       this.setState({
         teste: pickerPiso
       })
-    } else if (valor == 'Placas, lixeiras, postes e outros') {
+    } else if (valor == 'Placas, lixeiras, postes, bancos e outros') {
       this.setState({
         teste: pickerPlacas
-      })
-    } else if (valor == 'Pontos de ônibus') {
-      this.setState({
-        teste: pickerPontos
       })
     } else if (valor == 'Rampas') {
       this.setState({
@@ -243,8 +186,8 @@ export default class InsertCalcadaScreen extends React.Component {
       this.setState({
         teste: pickerSinalizacao
       })
-    }
   }
+}
 
   togglePicker() {
     this.setState({
@@ -265,32 +208,20 @@ export default class InsertCalcadaScreen extends React.Component {
     
     const pickerProblema = [
       {
-        title: 'Árvores',
-        value: 'Árvores'
+        title: 'Escadas e elevadores',
+        value: 'Escadas e elevadores'
       },
       {
-        title: 'Cobertura nos pontos de ônibus',
-        value: 'Cobertura nos pontos de ônibus'
-      },
-      {
-        title: 'Iluminação pública',
+        title: 'Iluminacão pública',
         value: 'Iluminação pública'
-      },
-      {
-        title: 'Obstáculos',
-        value: 'Obstáculos'
       },
       {
         title: 'Piso',
         value: 'Piso'
       },
       {
-        title: 'Placas, lixeiras, postes e outros',
-        value: 'Placas, lixeiras, postes e outros'
-      },
-      {
-        title: 'Pontos de ônibus',
-        value: 'Pontos de ônibus'
+        title: 'Placas, lixeiras, postes, bancos e outros',
+        value: 'Placas, lixeiras, postes, bancos e outros'
       },
       {
         title: 'Rampas',
@@ -302,13 +233,11 @@ export default class InsertCalcadaScreen extends React.Component {
       },
     ];
 
-
-
     return (
       <ScrollView>
         <SafeAreaView style={{ marginTop: 50 }}>
 
-          <Text style={styles.welcome}>Calçadas</Text>
+          <Text style={styles.welcome}>Prédios Públicos e praças</Text>
           <Formik
             initialValues={{ endereco: '', problema: 'Ruas', especificacao: '', detalhe: '', numero: '', bairro: '', cep: '', observacao: '', local: '', latitude: latitude, longitude: longitude, description: '', title: '' }}
             onSubmit={(values, actions) => {
@@ -498,6 +427,6 @@ const styles = StyleSheet.create({
   }
 });
 
-InsertCalcadaScreen.navigationOptions = {
+InsertPredioScreen.navigationOptions = {
   title: 'Nova Reclamação',
 };

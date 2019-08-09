@@ -34,7 +34,22 @@ const validationSchema = yup.object().shape({
 
 });
 
-const pickerArvores = [
+const pickerAsfalto = [
+  {
+    title: 'Ausência de asfalto',
+    value: 'Ausência de asfalto'
+  },
+  {
+    title: 'Buracos',
+    value: 'Buracos'
+  },
+  {
+    title: 'Outros defeitos',
+    value: 'Outros defeitos'
+  },
+]
+
+const pickerCiclovia = [
   {
     title: 'Ausência',
     value: 'Ausência'
@@ -49,7 +64,14 @@ const pickerArvores = [
   },
 ]
 
-const pickerCobertura = [
+const pickerEntulhos = [
+  {
+    title: 'Sem coleta',
+    value: 'Sem coleta'
+  },
+]
+
+const pickerFaixa = [
   {
     title: 'Ausência',
     value: 'Ausência'
@@ -64,7 +86,18 @@ const pickerCobertura = [
   },
 ]
 
-const pickerIluminacao = [
+const pickerOnibus = [
+  {
+    title: 'Incluir “parada”',
+    value: 'Incluir “parada”'
+  },
+  {
+    title: 'Incluir trajeto',
+    value: 'Incluir trajeto'
+  }
+]
+
+const pickerLombada = [
   {
     title: 'Ausência',
     value: 'Ausência'
@@ -79,67 +112,7 @@ const pickerIluminacao = [
   },
 ]
 
-const pickerObstaculos = [
-  {
-    title: 'Desníveis ou degraus na calçada',
-    value: 'Desníveis ou degraus na calçada'
-  },
-  {
-    title: 'Buracos na calçada',
-    value: 'Buracos na calçada'
-  },
-  {
-    title: 'Placas, lixeiras, postes e outros em locais inadequados na calçada',
-    value: 'Placas, lixeiras, postes e outros em locais inadequados na calçada'
-  },
-]
-
-const pickerPiso = [
-  {
-    title: 'Ausência',
-    value: 'Ausência'
-  },
-  {
-    title: 'Falta de conservação',
-    value: 'Falta de conservação'
-  },
-  {
-    title: 'Irregularidades',
-    value: 'Irregularidades'
-  },
-]
-
-const pickerPlacas = [
-  {
-    title: 'Ausência',
-    value: 'Ausência'
-  },
-  {
-    title: 'Falta de conservação',
-    value: 'Falta de conservação'
-  },
-  {
-    title: 'Irregularidades',
-    value: 'Irregularidades'
-  },
-]
-
-const pickerPontos = [
-  {
-    title: 'Ausência',
-    value: 'Ausência'
-  },
-  {
-    title: 'Falta de conservação',
-    value: 'Falta de conservação'
-  },
-  {
-    title: 'Irregularidades',
-    value: 'Irregularidades'
-  },
-]
-
-const pickerRampas = [
+const pickerSemaforo = [
   {
     title: 'Ausência',
     value: 'Ausência'
@@ -168,8 +141,7 @@ const pickerSinalizacao = [
     value: 'Irregularidades'
   },
 ]
-
-export default class InsertCalcadaScreen extends React.Component {
+export default class InsertRuaScreen extends React.Component {
 
   constructor(props) {
     super(props);
@@ -207,37 +179,33 @@ export default class InsertCalcadaScreen extends React.Component {
 
   mudaPicker(valor) {
 
-    if (valor == 'Árvores') {
+    if (valor == 'Asfalto') {
       this.setState({
-        teste: pickerArvores
+        teste: pickerAsfalto
       })
-    } else if (valor == 'Cobertura nos pontos de ônibus') {
+    } else if (valor == 'Ciclovias') {
       this.setState({
-        teste: pickerCobertura
+        teste: pickerCiclovia
       })
-    } else if (valor == 'Iluminação pública') {
+    } else if (valor == 'Entulhos ou galhadas') {
       this.setState({
-        teste: pickerIluminacao
+        teste: pickerEntulhos
       })
-    } else if (valor == 'Obstáculos') {
+    } else if (valor == 'Faixa de pedestres') {
       this.setState({
-        teste: pickerObstaculos
+        teste: pickerFaixa
       })
-    } else if (valor == 'Piso') {
+    } else if (valor == 'Linhas de ônibus') {
       this.setState({
-        teste: pickerPiso
+        teste: pickerOnibus
       })
-    } else if (valor == 'Placas, lixeiras, postes e outros') {
+    } else if (valor == 'Lombadas') {
       this.setState({
-        teste: pickerPlacas
+        teste: pickerLombada
       })
-    } else if (valor == 'Pontos de ônibus') {
+    } else if (valor == 'Semáforo') {
       this.setState({
-        teste: pickerPontos
-      })
-    } else if (valor == 'Rampas') {
-      this.setState({
-        teste: pickerRampas
+        teste: pickerSemaforo
       })
     } else if (valor == 'Sinalização') {
       this.setState({
@@ -262,39 +230,35 @@ export default class InsertCalcadaScreen extends React.Component {
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
-    
+
     const pickerProblema = [
       {
-        title: 'Árvores',
-        value: 'Árvores'
+        title: 'Asfalto',
+        value: 'Asfalto'
       },
       {
-        title: 'Cobertura nos pontos de ônibus',
-        value: 'Cobertura nos pontos de ônibus'
+        title: 'Ciclovias',
+        value: 'Ciclovias'
       },
       {
-        title: 'Iluminação pública',
-        value: 'Iluminação pública'
+        title: 'Entulhos ou galhadas',
+        value: 'Entulhos ou galhadas'
       },
       {
-        title: 'Obstáculos',
-        value: 'Obstáculos'
+        title: 'Faixa de pedestres',
+        value: 'Faixa de pedestres'
       },
       {
-        title: 'Piso',
-        value: 'Piso'
+        title: 'Linhas de ônibus',
+        value: 'Linhas de ônibus'
       },
       {
-        title: 'Placas, lixeiras, postes e outros',
-        value: 'Placas, lixeiras, postes e outros'
+        title: 'Lombadas',
+        value: 'Lombadas'
       },
       {
-        title: 'Pontos de ônibus',
-        value: 'Pontos de ônibus'
-      },
-      {
-        title: 'Rampas',
-        value: 'Rampas'
+        title: 'Semáforo',
+        value: 'Semáforo'
       },
       {
         title: 'Sinalização',
@@ -308,7 +272,7 @@ export default class InsertCalcadaScreen extends React.Component {
       <ScrollView>
         <SafeAreaView style={{ marginTop: 50 }}>
 
-          <Text style={styles.welcome}>Calçadas</Text>
+          <Text style={styles.welcome}>Ruas</Text>
           <Formik
             initialValues={{ endereco: '', problema: 'Ruas', especificacao: '', detalhe: '', numero: '', bairro: '', cep: '', observacao: '', local: '', latitude: latitude, longitude: longitude, description: '', title: '' }}
             onSubmit={(values, actions) => {
@@ -498,6 +462,6 @@ const styles = StyleSheet.create({
   }
 });
 
-InsertCalcadaScreen.navigationOptions = {
+InsertRuaScreen.navigationOptions = {
   title: 'Nova Reclamação',
 };

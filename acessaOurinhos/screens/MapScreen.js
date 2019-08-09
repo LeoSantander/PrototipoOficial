@@ -100,6 +100,11 @@ export default class MapScreen extends React.Component{
 
   componentDidMount(){
 
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener("didFocus", () => {
+      this.forceUpdate();
+    });
+
     var that = this;
 
     that._isMounted = true;
