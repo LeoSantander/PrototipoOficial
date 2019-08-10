@@ -450,6 +450,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
+    height:100,
     marginBottom: 3,
 
   },

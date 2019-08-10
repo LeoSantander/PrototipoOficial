@@ -437,7 +437,7 @@ export default class InsertCalcadaScreen extends React.Component {
                       onChangeText={formikProps.handleChange('observacao')}
                       onBlur={formikProps.handleBlur('observacao')}
                     />
-                    <Text style={{ color: 'red' }}>
+                    <Text style={{ color: 'red', }}>
                       {formikProps.touched.observacao && formikProps.errors.observacao}
                     </Text>
                   </View>
@@ -486,6 +486,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
+    height:100,
     marginBottom: 3,
 
   },
