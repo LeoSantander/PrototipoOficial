@@ -25,6 +25,7 @@
     "formik": "^1.5.8",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
+    "react-geocode": "^0.1.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-camera": "^3.0.1",
     "react-native-elements": "^1.1.0",

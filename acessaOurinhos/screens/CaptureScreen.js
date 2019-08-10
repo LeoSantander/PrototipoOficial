@@ -19,12 +19,18 @@ export default class CaptureScreen extends React.Component {
     takePicture = async () => {
         if (this.camera) {
             photo = await this.camera.takePictureAsync();
-            console.log(photo);
             this.props.navigation.navigate('ExibeImagem', {photo});
         }
     }
 
     render() {
+
+        const { navigation } = this.props;
+        const photo = navigation.getParam('photo');
+        const NMPagina = navigation.getParam('nomePagina');
+        
+        console.log('Tem que estar exibindo: '+NMPagina);
+
         const { hasCameraPermission } = this.state;
         if (hasCameraPermission === null) {
             return <View />;

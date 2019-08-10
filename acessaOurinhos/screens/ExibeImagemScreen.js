@@ -1,18 +1,21 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import * as Permissions from 'expo-permissions';
-import { Camera } from 'expo-camera';
 import { Button } from 'react-native-elements';
-import CaptureScreen from './CaptureScreen';
+import firebase from 'firebase';
 
 export default class ExibeImagemScreen extends React.Component {
+    state = {
+        image: null,
+        uploading: false,
+    };
 
     render() {
 
         const { navigation } = this.props;
         const photo = navigation.getParam('photo');
+        const NMPagina = navigation.getParam('NMPagina');
 
-        console.log("To aqui: " + photo);
+        console.log("Página pra retornar: " + NMPagina);
 
         return (
             <View>
@@ -22,22 +25,37 @@ export default class ExibeImagemScreen extends React.Component {
                 />
 
                 <Button
-                    style={{marginTop:20, marginLeft: 50, marginRight: 50, marginBottom: 20 }}
+                    style={{ marginTop: 20, marginLeft: 50, marginRight: 50, marginBottom: 20 }}
                     large
-                    icon={{ name: 'md-exit', type: 'font-awesome' }}
                     title='Cancelar'
                     onPress={() => this.props.navigation.navigate('Capture')}
                 />
 
                 <Button
-                    style={{ marginLeft: 50, marginRight: 50}}
+                    style={{ marginLeft: 50, marginRight: 50 }}
                     large
                     icon={{ name: 'save', type: 'font-awesome' }}
                     title='Salvar'
-                    onPress={this.takePicture}
+                    onPress={() => this.enviar()}
                 />
 
             </View>
         );
     }
+
+    enviar(){  
+        uploadImageAsync(photo.uri, "LukinhaDelicinha2019");
+        this.props.navigation.navigate('Capture');
+    }
+}
+
+uploadImageAsync = async (uri, imageName) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    console.log("Jesus me ajude");
+    var ref = firebase.storage().ref().child("images/" + imageName);
+
+    const snapshot = await ref.put(blob);
+    teste = await snapshot.ref.getDownloadURL();
+    console.log("É O SEGUINTE: "+ teste);
 }
