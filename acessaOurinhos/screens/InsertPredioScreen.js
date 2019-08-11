@@ -3,7 +3,6 @@ import {
   Alert,
   SafeAreaView,
   TextInput,
-  Button,
   ActivityIndicator,
   Text,
   ScrollView,
@@ -16,8 +15,10 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
+import { Button } from 'react-native-elements';
 import { Dimensions } from "react-native";
 import firebase from 'firebase';
+import Geocode from "react-geocode";
 
 const SCREENWIDTH = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -26,13 +27,12 @@ const validationSchema = yup.object().shape({
   observacao: yup
     .string()
     .label('Observação'),
-  local: yup
-    .string(),
-  description: yup
-    .string(),
-  title: yup
-    .string(),
-
+  especificacao: yup
+    .string()
+    .required('O campo Problema é obrigatório!'),
+  detalhe: yup
+    .string()
+    .required('O campo Detalhes é obrigatório!'),
 });
 
 const pickerEscadas = [
@@ -135,6 +135,7 @@ export default class InsertPredioScreen extends React.Component {
       local: [{},],
       tipo: [{},],
       valbd: [],
+      address: '',
 
       teste: [],
       pickerSelection: 'Selecione um problema',
@@ -207,6 +208,20 @@ export default class InsertPredioScreen extends React.Component {
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
 
+    // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+    Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");
+
+    // Get address from latidude & longitude.
+    Geocode.fromLatLng(latitude, longitude).then(
+      response => {
+        this.setState({ address: response.results[0].formatted_address });
+        //console.log(address);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+
     const pickerProblema = [
       {
         title: 'Escadas e elevadores',
@@ -241,7 +256,7 @@ export default class InsertPredioScreen extends React.Component {
 
             <Text style={styles.welcome}>Prédios Públicos e praças</Text>
             <Formik
-              initialValues={{ endereco: '', problema: 'Ruas', especificacao: '', detalhe: '', numero: '', bairro: '', cep: '', observacao: '', local: '', latitude: latitude, longitude: longitude, description: '', title: '' }}
+              initialValues={{ endereco: '', problema: 'Prédios Públicos e praças', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude }}
               onSubmit={(values, actions) => {
 
                 var that = this;
@@ -281,6 +296,9 @@ export default class InsertPredioScreen extends React.Component {
                     <TouchableOpacity style={styles.pickerStyle} onPress={() => this.togglePicker()} >
                       <Text>{this.state.pickerSelection}</Text>
                     </TouchableOpacity>
+                    <Text style={{ color: 'red' }}>
+                      {formikProps.touched.especificacao && formikProps.errors.especificacao}
+                    </Text>
 
                     <Modal visible={this.state.pickerDisplayed} animationType={"slide"} transparent={true}>
                       <View style={{
@@ -298,7 +316,7 @@ export default class InsertPredioScreen extends React.Component {
                           }}>Escolha Um problema</Text>
                           {pickerProblema.map((value, index) => {
 
-                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value) }} style={{
+                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address) }} style={{
                               paddingTop: 4, paddingBottom: 4, alignItems: 'center',
                               justifyContent: 'center',
                             }}>
@@ -323,6 +341,9 @@ export default class InsertPredioScreen extends React.Component {
                     <TouchableOpacity style={styles.pickerStyle} onPress={() => this.togglePicker2()} >
                       <Text>{this.state.pickerSelection2}</Text>
                     </TouchableOpacity>
+                    <Text style={{ color: 'red' }}>
+                      {formikProps.touched.detalhe && formikProps.errors.detalhe}
+                    </Text>
 
                     <Modal visible={this.state.pickerDisplayed2} animationType={"slide"} transparent={true}>
                       <View style={{
@@ -373,7 +394,6 @@ export default class InsertPredioScreen extends React.Component {
 
                   <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
                     <Button
-                      style={{ marginLeft: 50, marginRight: 50 }}
                       large
                       icon={{ name: 'camera', type: 'font-awesome' }}
                       title='Enviar Foto'
@@ -381,12 +401,17 @@ export default class InsertPredioScreen extends React.Component {
                     />
                   </View>
 
-                  {formikProps.isSubmitting ? (
-                    <ActivityIndicator />
-                  ) : (
-                      <Button title="Enviar" onPress={formikProps.handleSubmit} />
+                  <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
+                    {formikProps.isSubmitting ? (
+                      <ActivityIndicator />
+                    ) : (
+                        <Button 
+                          title="Enviar" 
+                          icon={{ name: 'check', type: 'font-awesome' }}
+                          onPress={formikProps.handleSubmit} />
 
-                    )}
+                      )}
+                  </View>
                 </React.Fragment>
               )}
             </Formik>
@@ -415,7 +440,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd',
     padding: 10,
-    height:100,
+    height: 100,
     marginBottom: 3,
 
   },

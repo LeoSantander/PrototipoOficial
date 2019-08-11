@@ -145,7 +145,6 @@ export default class MapScreen extends React.Component{
       ]
     });
     this.props.navigation.navigate('Buttons', {latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude})
-
   }
 
   componentWillUnmount() {
@@ -194,8 +193,8 @@ export default class MapScreen extends React.Component{
 
               <MapView.Marker
                 ref={mark => place.mark = mark}
-                title={place.problema}
-                description={place.observacao}
+                title={place.especificacao}
+                description={place.detalhe}
                 key={index}
                 coordinate={{
                   latitude: place.latitude,
@@ -239,9 +238,10 @@ export default class MapScreen extends React.Component{
               <View key={index} style={styles.place}>
                 <View style={{ margin: 10 }}>
                   <Text style={styles.titulo}>Endereço:</Text>
-                  <Text>{place.endereco},{place.numero} {place.bairro} - {place.cep}</Text>
-                  <Text style={styles.titulo}>Reclamação: </Text>
-                  <Text>{place.problema} - {place.observacao}</Text>
+                  <Text>{place.endereco}</Text>
+                  <Text style={styles.titulo}>Reclamação: {place.problema}</Text>
+                  <Text>{place.especificacao} - {place.detalhe}</Text>
+                  <Text>{place.observacao}</Text>
                   <View style={{ height: 10 }}></View>
 
                 </View>

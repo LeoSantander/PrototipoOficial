@@ -10,28 +10,7 @@ import {
   View,
 } from 'react-native';
 import { Button } from 'react-native-elements';
-
 import { MonoText } from '../components/StyledText';
-import Geocode from "react-geocode";
-
-//https://maps.googleapis.com/maps/api/geocode/json?address=[AIzaSyBxUWug-FSHxNIwdCizzmCnFnx7YKXYMJ8]&sensor=true
-
-// set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
-Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");
-
-// Enable or disable logs. Its optional.
-Geocode.enableDebug();
-
-// Get address from latidude & longitude.
-Geocode.fromLatLng("-22.976993952717446", "-49.86962722641639").then(
-  response => {
-    const address = response.results[0].formatted_address;
-    console.log(address);
-  },
-  error => {
-    console.error(error);
-  }
-);
 
 export default class HomeScreen extends React.Component {
 
