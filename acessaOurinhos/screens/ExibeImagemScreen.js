@@ -1,12 +1,23 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Platform, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
 
+global.LinkDownload = '';
+
+
 export default class ExibeImagemScreen extends React.Component {
-    state = {
-        image: null,
-        uploading: false,
+
+    constructor(props) {
+        super(props);
+        this.watchID = null;
+
+        this.state = {
+            image: null,
+            uploading: false,
+            isLoading: false,
+            download: '',
+        }
     };
 
     render() {
@@ -14,8 +25,10 @@ export default class ExibeImagemScreen extends React.Component {
         const { navigation } = this.props;
         const photo = navigation.getParam('photo');
         const NMPagina = navigation.getParam('NMPagina');
+        const latitude = navigation.getParam('latitude');
+        const longitude = navigation.getParam('longitude');
 
-        console.log("Página pra retornar: " + NMPagina);
+        console.log("Página pra retornar: " + '"' + NMPagina + '"');
 
         return (
             <View>
@@ -36,26 +49,49 @@ export default class ExibeImagemScreen extends React.Component {
                     large
                     icon={{ name: 'save', type: 'font-awesome' }}
                     title='Salvar'
-                    onPress={() => this.enviar()}
+                    onPress={() => this.enviar(latitude, longitude, NMPagina)}
                 />
 
             </View>
         );
     }
 
-    enviar(){  
-        uploadImageAsync(photo.uri, "LukinhaDelicinha2019");
-        this.props.navigation.navigate('Capture');
+    enviar(latitude, longitude, NMPagina) {
+        var NomeArq = latitude + '_' + longitude;
+        console.log('Nome do arquivo: ' + NomeArq)
+
+        uploadImageAsync(photo.uri, NomeArq);
+
+        Alert.alert(
+            'Carregando...',
+            'Aguarde, quando o processamento da imagem for concluído você será redirecionado para concluir o cadastro!',
+            [
+                { text: 'Entendi', onPress: () => console.log('OK Pressed') },
+            ])
+
+        setTimeout(() => {
+            this.MudarTela(NMPagina);
+        }, 20000);
+
+    }
+
+    MudarTela(NMPagina) {
+        this.props.navigation.navigate(NMPagina);
+        
     }
 }
 
 uploadImageAsync = async (uri, imageName) => {
+
     const response = await fetch(uri);
     const blob = await response.blob();
-    console.log("Jesus me ajude");
+
     var ref = firebase.storage().ref().child("images/" + imageName);
 
     const snapshot = await ref.put(blob);
-    teste = await snapshot.ref.getDownloadURL();
-    console.log("É O SEGUINTE: "+ teste);
+
+    LinkDownload = await snapshot.ref.getDownloadURL();
+
+    return await snapshot.ref.getDownloadURL();
+
 }

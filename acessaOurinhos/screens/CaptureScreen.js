@@ -4,7 +4,6 @@ import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import { Button } from 'react-native-elements';
 
-
 export default class CaptureScreen extends React.Component {
     state = {
         hasCameraPermission: null,
@@ -16,10 +15,11 @@ export default class CaptureScreen extends React.Component {
         this.setState({ hasCameraPermission: status === 'granted' });
     }
 
-    takePicture = async () => {
+    takePicture = async (latitude, longitude, NMPagina) => {
         if (this.camera) {
             photo = await this.camera.takePictureAsync();
-            this.props.navigation.navigate('ExibeImagem', {photo});
+            console.log('Tem Valor?: '+latitude+'_'+ longitude)
+            this.props.navigation.navigate('ExibeImagem', {photo, latitude, longitude, NMPagina});
         }
     }
 
@@ -27,9 +27,10 @@ export default class CaptureScreen extends React.Component {
 
         const { navigation } = this.props;
         const photo = navigation.getParam('photo');
-        const NMPagina = navigation.getParam('nomePagina');
-        
-        console.log('Tem que estar exibindo: '+NMPagina);
+        const NMPagina = navigation.getParam('NMPagina');
+        const latitude = navigation.getParam('latitude');
+        const longitude = navigation.getParam('longitude');
+
 
         const { hasCameraPermission } = this.state;
         if (hasCameraPermission === null) {
@@ -60,7 +61,7 @@ export default class CaptureScreen extends React.Component {
                         large
                         icon={{ name: 'camera', type: 'font-awesome' }}
                         title='Capturar'
-                        onPress={this.takePicture}
+                        onPress={() => this.takePicture(latitude, longitude, NMPagina)}
                     />
                 </View>
             );

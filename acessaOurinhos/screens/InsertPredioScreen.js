@@ -19,6 +19,7 @@ import { Button } from 'react-native-elements';
 import { Dimensions } from "react-native";
 import firebase from 'firebase';
 import Geocode from "react-geocode";
+import ExibeImagemScreen from './ExibeImagemScreen';
 
 const SCREENWIDTH = Dimensions.get('window').width; //full width
 var height = Dimensions.get('window').height; //full height
@@ -208,6 +209,11 @@ export default class InsertPredioScreen extends React.Component {
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
 
+    const Download = global.LinkDownload;
+    
+
+    const NMPagina = 'PredioInsert';
+
     // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
     Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");
 
@@ -256,7 +262,7 @@ export default class InsertPredioScreen extends React.Component {
 
             <Text style={styles.welcome}>Prédios Públicos e praças</Text>
             <Formik
-              initialValues={{ endereco: '', problema: 'Prédios Públicos e praças', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude }}
+              initialValues={{ endereco: '', problema: 'Prédios Públicos e praças', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude, Download: '' }}
               onSubmit={(values, actions) => {
 
                 var that = this;
@@ -316,7 +322,7 @@ export default class InsertPredioScreen extends React.Component {
                           }}>Escolha Um problema</Text>
                           {pickerProblema.map((value, index) => {
 
-                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address) }} style={{
+                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address); formikProps.setFieldValue('Download', Download) }} style={{
                               paddingTop: 4, paddingBottom: 4, alignItems: 'center',
                               justifyContent: 'center',
                             }}>
@@ -397,7 +403,7 @@ export default class InsertPredioScreen extends React.Component {
                       large
                       icon={{ name: 'camera', type: 'font-awesome' }}
                       title='Enviar Foto'
-                      onPress={() => this.props.navigation.navigate('Capture')}
+                      onPress={() => this.props.navigation.navigate('Capture', { latitude, longitude, NMPagina })}
                     />
                   </View>
 
