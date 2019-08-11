@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ScrollView,
   Button,
+  Image,
   Dimensions,
   TouchableOpacity,
   ActivityIndicator
@@ -207,7 +208,16 @@ export default class MapScreen extends React.Component {
                 coordinate={{
                   latitude: place.latitude,
                   longitude: place.longitude,
-                }} />
+                }} >
+                {
+                  place.problema == 'Calçadas' ?
+                    <Image source={require('../assets/images/marker.png')} style={{ height: 35, width: 35 }} /> :
+                    place.problema == 'Ruas' ?
+                      <Image source={require('../assets/images/marker-blue.png')} style={{ height: 35, width: 35 }} /> :
+                      <Image source={require('../assets/images/marker-green.png')} style={{ height: 35, width: 35 }} />
+                }
+
+              </MapView.Marker>
             ))}
 
             <MapView.Marker
@@ -264,10 +274,16 @@ export default class MapScreen extends React.Component {
                   </View>
                 ))}
 
-              </ScrollView> : <TouchableOpacity onPress={this.componentHideAndShow} >
+              </ScrollView> : <View><TouchableOpacity onPress={this.componentHideAndShow} >
                 <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
               </TouchableOpacity>
+              <Image source={require('../assets/images/logo-insti.png')} style={{ width: 55, height: 45.7, position: 'absolute',bottom:0,}} />
+              </View>
+              
           }
+
+          
+          
 
         </View>
       );
