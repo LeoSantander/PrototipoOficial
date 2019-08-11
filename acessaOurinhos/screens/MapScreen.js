@@ -1,12 +1,15 @@
 import React from 'react';
-import { Platform, 
-         Text, 
-         View, 
-         StyleSheet, 
-         ScrollView, 
-         Dimensions, 
-         ActivityIndicator
-        } from 'react-native';
+import {
+  Platform,
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  Button,
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
@@ -28,7 +31,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGTITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-export default class MapScreen extends React.Component{
+export default class MapScreen extends React.Component {
 
   _isMounted = false;
 
@@ -41,7 +44,7 @@ export default class MapScreen extends React.Component{
       refreshing: false,
       location: null,
       errorMessage: null,
-      location: null,      
+      location: null,
       errorMessage: null,
       Alert_Visibility: false,
       markers: [],
@@ -58,6 +61,7 @@ export default class MapScreen extends React.Component{
       teste: [],
       places: [],
       data: [],
+      content: false,
     };
 
     this.handlePress = this.handlePress.bind(this);
@@ -71,7 +75,7 @@ export default class MapScreen extends React.Component{
     } else {
       this._getLocationAsync();
     }
-   this.state.isLoading = true;
+    this.state.isLoading = true;
   }
 
   _getLocationAsync = async () => {
@@ -84,21 +88,21 @@ export default class MapScreen extends React.Component{
     let location = await Location.getCurrentPositionAsync({});
     this.setState({ location });
 
-      var lat = this.state.location.coords.latitude
-      var long = this.state.location.coords.longitude
+    var lat = this.state.location.coords.latitude
+    var long = this.state.location.coords.longitude
 
-      var initialRegion = {
-        latitude: lat,
-        longitude: long,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGTITUDE_DELTA
-      }
+    var initialRegion = {
+      latitude: lat,
+      longitude: long,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGTITUDE_DELTA
+    }
 
-      this.setState({ initialPosition: initialRegion })
-      this.setState({ markerPosition: initialRegion })
+    this.setState({ initialPosition: initialRegion })
+    this.setState({ markerPosition: initialRegion })
   };
 
-  componentDidMount(){
+  componentDidMount() {
 
     const { navigation } = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
@@ -122,16 +126,16 @@ export default class MapScreen extends React.Component{
 
     var rootRef = firebase.database().ref();
     var ref = rootRef.child("users");
-    
+
     ref.once("value").then(function (snapshot) {
       var data = snapshot.exportVal();
-      
+
       if (that._isMounted) {
         that.setState({ places: data });
-        that.setState({isLoading: false});
+        that.setState({ isLoading: false });
       }
     });
-    
+
   }
 
   handlePress(e) {
@@ -144,7 +148,7 @@ export default class MapScreen extends React.Component{
         }
       ]
     });
-    this.props.navigation.navigate('Buttons', {latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude})
+    this.props.navigation.navigate('Buttons', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
   }
 
   componentWillUnmount() {
@@ -153,7 +157,11 @@ export default class MapScreen extends React.Component{
     navigator.geolocation.clearWatch(this.watchID);
   }
 
-  render(){
+  componentHideAndShow = () => {
+    this.setState(previousState => ({ content: !previousState.content }))
+  }
+
+  render() {
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
@@ -182,7 +190,7 @@ export default class MapScreen extends React.Component{
                 <MapView.Marker {...marker}
                   ref={mark => marker.mark = mark}
                   title='Nova Reclamação'
-                  key = {index}
+                  key={index}
                   description={'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
                 >
                 </MapView.Marker>
@@ -211,43 +219,56 @@ export default class MapScreen extends React.Component{
             </MapView.Marker>
 
           </MapView>
-          <ScrollView
-            style={styles.placeContainer}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            onMomentumScrollEnd={(e) => {
-              const place = (e.nativeEvent.contentOffset.x > 0)
-                ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
-                : 0;
 
-              const { latitude, longitude, mark } = this.state.places[place];
+          {
+            // Display the content in screen when state object "content" is true.
+            // Hide the content in screen when state object "content" is false. 
+            this.state.content ?
+              <ScrollView
+                style={styles.placeContainer}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                visible={this.state.pickerDisplayed2}
+                onMomentumScrollEnd={(e) => {
+                  const place = (e.nativeEvent.contentOffset.x > 0)
+                    ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
+                    : 0;
 
-              this.mapView.animateToCoordinate({
-                latitude,
-                longitude
-              }, 1000);
+                  const { latitude, longitude, mark } = this.state.places[place];
 
-              setTimeout(() => {
-                mark.showCallout();
-              }, 500);
+                  this.mapView.animateToCoordinate({
+                    latitude,
+                    longitude
+                  }, 1000);
 
-            }}
-          >
-            {array.map((place, index) => (
-              <View key={index} style={styles.place}>
-                <View style={{ margin: 10 }}>
-                  <Text style={styles.titulo}>Endereço:</Text>
-                  <Text>{place.endereco}</Text>
-                  <Text style={styles.titulo}>Reclamação: {place.problema}</Text>
-                  <Text>{place.especificacao} - {place.detalhe}</Text>
-                  <Text>{place.observacao}</Text>
-                  <View style={{ height: 10 }}></View>
+                  setTimeout(() => {
+                    mark.showCallout();
+                  }, 500);
 
-                </View>
-              </View>
-            ))}
-          </ScrollView>
+                }}
+              >
+                {array.map((place, index) => (
+                  <View key={index} style={styles.place}>
+                    <View style={{ margin: 10 }}>
+                      <Text style={{ paddingTop: 10, color: '#000', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Endereço:</Text>
+                      <Text>{place.endereco}</Text>
+                      <Text style={{ paddingTop: 10, color: '#000', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Reclamação: {place.problema}</Text>
+                      <Text>{place.especificacao} - {place.detalhe}</Text>
+                      <Text>{place.observacao}</Text>
+                      <View style={{ height: 10 }}></View>
+                      <TouchableOpacity onPress={this.componentHideAndShow} >
+                        <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ocultar Detalhes</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                ))}
+
+              </ScrollView> : <TouchableOpacity onPress={this.componentHideAndShow} >
+                <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
+              </TouchableOpacity>
+          }
+
         </View>
       );
     }
@@ -265,7 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
-  
+
   radius: {
     height: 50,
     width: 50,
@@ -306,13 +327,11 @@ const styles = StyleSheet.create({
   },
   placeContainer: {
     width: '100%',
-    maxHeight: 150,
+    maxHeight: 250,
   },
   place: {
-    width: width - 40,
-    maxHeight: 200,
-    backgroundColor: '#FFF',
-    marginHorizontal: 20,
+    width: width,
+    backgroundColor: '#fff',
     borderRadius: 7,
   },
 
