@@ -208,11 +208,7 @@ export default class InsertPredioScreen extends React.Component {
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
-
-    const Download = global.LinkDownload;
-    
-
-    const NMPagina = 'PredioInsert';
+    const Download = navigation.getParam('LinkDownload');
 
     // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
     Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");
@@ -396,15 +392,6 @@ export default class InsertPredioScreen extends React.Component {
                     <Text style={{ color: 'red' }}>
                       {formikProps.touched.observacao && formikProps.errors.observacao}
                     </Text>
-                  </View>
-
-                  <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
-                    <Button
-                      large
-                      icon={{ name: 'camera', type: 'font-awesome' }}
-                      title='Enviar Foto'
-                      onPress={() => this.props.navigation.navigate('Capture', { latitude, longitude, NMPagina })}
-                    />
                   </View>
 
                   <View style={{ marginHorizontal: 20, marginVertical: 5 }}>

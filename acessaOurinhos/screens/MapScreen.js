@@ -29,7 +29,7 @@ const { height, width } = Dimensions.get('window');
 const SCREENHEIGHT = height;
 const SCREENWIDTH = width;
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 0.009;
 const LONGTITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class MapScreen extends React.Component {
@@ -149,7 +149,7 @@ export default class MapScreen extends React.Component {
         }
       ]
     });
-    this.props.navigation.navigate('Buttons', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
+    this.props.navigation.navigate('Capture', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
   }
 
   componentWillUnmount() {

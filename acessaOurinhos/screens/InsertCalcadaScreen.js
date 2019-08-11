@@ -267,13 +267,10 @@ export default class InsertCalcadaScreen extends React.Component {
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
-
-    const Download = global.LinkDownload;
+    const Download = navigation.getParam('LinkDownload');
     
 
-    const NMPagina = 'CalcadaInsert';
-
-    // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
+     // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
     Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");
 
     // Get address from latidude & longitude.
@@ -468,15 +465,6 @@ export default class InsertCalcadaScreen extends React.Component {
                     <Text style={{ color: 'red', }}>
                       {formikProps.touched.observacao && formikProps.errors.observacao}
                     </Text>
-                  </View>
-
-                  <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
-                    <Button
-                      large
-                      icon={{ name: 'camera', type: 'font-awesome' }}
-                      title='Enviar Foto'
-                      onPress={() => this.props.navigation.navigate('Capture', { latitude, longitude, NMPagina })}
-                    />
                   </View>
 
                   <View style={{ marginHorizontal: 20, marginVertical: 5 }}>

@@ -9,7 +9,6 @@ import {
 import { Button } from 'react-native-elements';
 
 
-
 export default class ButtonsScreen extends React.Component{
 
     constructor () {
@@ -24,6 +23,7 @@ export default class ButtonsScreen extends React.Component{
         const { navigation } = this.props;
         const latitude = navigation.getParam('latitude');
         const longitude = navigation.getParam('longitude');
+        const LinkDownload = navigation.getParam('LinkDownload');
         
         return(
             
@@ -34,7 +34,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'arrow-up', type: 'font-awesome'}}
                         title='Calçadas' 
-                        onPress={() => this.props.navigation.navigate('CalcadaInsert', {latitude: latitude, longitude: longitude})}>
+                        onPress={() => this.props.navigation.navigate('CalcadaInsert', {latitude: latitude, longitude: longitude, LinkDownload})}>
                     </Button>
                 </View>
 
@@ -42,7 +42,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'road', type: 'font-awesome'}}
                         title='Ruas' 
-                        onPress={() => this.props.navigation.navigate('RuaInsert', {latitude: latitude, longitude: longitude})}>
+                        onPress={() => this.props.navigation.navigate('RuaInsert', {latitude: latitude, longitude: longitude, LinkDownload})}>
                     </Button>
                 </View>
 
@@ -50,7 +50,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'building', type: 'font-awesome'}}
                         title='Prédios' 
-                        onPress={() => this.props.navigation.navigate('PredioInsert', {latitude: latitude, longitude: longitude})}>
+                        onPress={() => this.props.navigation.navigate('PredioInsert', {latitude: latitude, longitude: longitude, LinkDownload})}>
                     </Button>
                 </View>
                 

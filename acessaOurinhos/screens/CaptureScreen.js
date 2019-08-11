@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import { Button } from 'react-native-elements';
@@ -15,22 +15,15 @@ export default class CaptureScreen extends React.Component {
         this.setState({ hasCameraPermission: status === 'granted' });
     }
 
-    takePicture = async (latitude, longitude, NMPagina) => {
+    takePicture = async (latitude, longitude) => {
         if (this.camera) {
             photo = await this.camera.takePictureAsync();
             console.log('Tem Valor?: '+latitude+'_'+ longitude)
-            this.props.navigation.navigate('ExibeImagem', {photo, latitude, longitude, NMPagina});
+            this.props.navigation.navigate('ExibeImagem', {photo, latitude, longitude});
         }
     }
 
     render() {
-
-        const { navigation } = this.props;
-        const photo = navigation.getParam('photo');
-        const NMPagina = navigation.getParam('NMPagina');
-        const latitude = navigation.getParam('latitude');
-        const longitude = navigation.getParam('longitude');
-
 
         const { hasCameraPermission } = this.state;
         if (hasCameraPermission === null) {
@@ -38,7 +31,21 @@ export default class CaptureScreen extends React.Component {
         } else if (hasCameraPermission === false) {
             return <Text>Sem Acesso a Câmera! </Text>;
         } else {
+
+            Alert.alert(
+                'Deseja Mesmo Enviar uma Foto?',
+                'Enviar uma foto é opciona, você Deseja Continuar?',
+                [
+                    { text: 'Enviar um Foto', onPress: () => console.log('OK Pressed') },
+                    { text: 'Não Enviar', onPress: () => this.props.navigation.navigate('Buttons', {latitude, longitude}) },
+                ])
+    
+            const { navigation } = this.props;
+            const latitude = navigation.getParam('latitude');
+            const longitude = navigation.getParam('longitude');
+            
             return (
+                
                 <View style={{ flex: 1 }}>
                     <Camera 
                         ref={ref => {
@@ -61,7 +68,7 @@ export default class CaptureScreen extends React.Component {
                         large
                         icon={{ name: 'camera', type: 'font-awesome' }}
                         title='Capturar'
-                        onPress={() => this.takePicture(latitude, longitude, NMPagina)}
+                        onPress={() => this.takePicture(latitude, longitude)}
                     />
                 </View>
             );

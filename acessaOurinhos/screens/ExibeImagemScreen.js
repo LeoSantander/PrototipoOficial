@@ -24,11 +24,8 @@ export default class ExibeImagemScreen extends React.Component {
 
         const { navigation } = this.props;
         const photo = navigation.getParam('photo');
-        const NMPagina = navigation.getParam('NMPagina');
         const latitude = navigation.getParam('latitude');
         const longitude = navigation.getParam('longitude');
-
-        console.log("Página pra retornar: " + '"' + NMPagina + '"');
 
         return (
             <View>
@@ -49,14 +46,14 @@ export default class ExibeImagemScreen extends React.Component {
                     large
                     icon={{ name: 'save', type: 'font-awesome' }}
                     title='Salvar'
-                    onPress={() => this.enviar(latitude, longitude, NMPagina)}
+                    onPress={() => this.enviar(latitude, longitude)}
                 />
 
             </View>
         );
     }
 
-    enviar(latitude, longitude, NMPagina) {
+    enviar(latitude, longitude) {
         var NomeArq = latitude + '_' + longitude;
         console.log('Nome do arquivo: ' + NomeArq)
 
@@ -70,13 +67,14 @@ export default class ExibeImagemScreen extends React.Component {
             ])
 
         setTimeout(() => {
-            this.MudarTela(NMPagina);
-        }, 20000);
+            this.MudarTela('Buttons', latitude, longitude);
+        }, 30000);
 
     }
 
-    MudarTela(NMPagina) {
-        this.props.navigation.navigate(NMPagina);
+    MudarTela(NMPagina, latitude, longitude) {
+        console.log('Link para Donwload da imagem Maravilhosa!: ' + LinkDownload);
+        this.props.navigation.navigate(NMPagina, {latitude, longitude, LinkDownload});
         
     }
 }
@@ -91,6 +89,7 @@ uploadImageAsync = async (uri, imageName) => {
     const snapshot = await ref.put(blob);
 
     LinkDownload = await snapshot.ref.getDownloadURL();
+    console.log("Deveria mostrar: "+ LinkDownload);
 
     return await snapshot.ref.getDownloadURL();
 
