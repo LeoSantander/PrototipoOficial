@@ -1,9 +1,16 @@
 import React from 'react';
-import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Platform, Alert } from 'react-native';
+import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Platform, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
+import Load from "react-native-loading-gif";
 
 global.LinkDownload = '';
+
+const { height, width } = Dimensions.get('window');
+
+const SCREENHEIGHT = height;
+const SCREENWIDTH = width - 20;
+
 
 
 export default class ExibeImagemScreen extends React.Component {
@@ -27,44 +34,60 @@ export default class ExibeImagemScreen extends React.Component {
         const latitude = navigation.getParam('latitude');
         const longitude = navigation.getParam('longitude');
 
-        return (
-            <View>
-                <Image
-                    style={{ width: 350, height: 400, marginLeft: 30, marginRight: 30, marginTop: 30 }}
-                    source={{ uri: photo.uri }}
-                />
+        if (this.state.isLoading == false) {
+            return (
+                <View style={styles.container}>
+                    <Image
+                        style={{ width: SCREENWIDTH, height: 400, }}
+                        source={{ uri: photo.uri }}
+                    />
 
-                <Button
-                    style={{ marginTop: 20, marginLeft: 50, marginRight: 50, marginBottom: 20 }}
-                    large
-                    title='Cancelar'
-                    onPress={() => this.props.navigation.navigate('Capture')}
-                />
+                    <Button
+                        style={{ marginTop: 20, marginBottom: 20 }}
+                        disabled={this.state.isLoading}
+                        large
+                        title='Cancelar'
+                        onPress={() => this.props.navigation.navigate('Capture')}
+                    />
 
-                <Button
-                    style={{ marginLeft: 50, marginRight: 50 }}
-                    large
-                    icon={{ name: 'save', type: 'font-awesome' }}
-                    title='Salvar'
-                    onPress={() => this.enviar(latitude, longitude)}
-                />
+                    <Button
+                        disabled={this.state.isLoading}
+                        large
+                        icon={{ name: 'save', type: 'font-awesome' }}
+                        title='Salvar'
+                        onPress={() => this.enviar(latitude, longitude)}
+                    />
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Image
+                        style={{ width: SCREENWIDTH, height: 400, }}
+                        source={{ uri: photo.uri }}
+                    />
+                    <View style={{ flex: 1, padding: 20 }}>
+                    <ActivityIndicator />
+                        <Text style={styles.TextStyle}>Sua imagem esta sendo processada! Aguarde...</Text>
+                        <Text style={styles.TextSmall}>O tempo de envio varia de acordo com a velocidade da sua conexão!</Text>
+                    </View>
 
-            </View>
-        );
+                </View>
+            );
+
+        }
+
     }
 
     enviar(latitude, longitude) {
-        var NomeArq = latitude + '_' + longitude;
-        console.log('Nome do arquivo: ' + NomeArq)
 
+        this.setState(function () { return { isLoading: true } });
+
+        var NomeArq = latitude + '_' + longitude;
         uploadImageAsync(photo.uri, NomeArq);
 
-        Alert.alert(
-            'Carregando...',
-            'Aguarde, quando o processamento da imagem for concluído você será redirecionado para concluir o cadastro!',
-            [
-                { text: 'Entendi', onPress: () => console.log('OK Pressed') },
-            ])
+        // No Lugar desse seTimeout, validar ser a Var Global LinkDonwload está setada:
+        // - Se Houver valor setado, chama a função MudarTela, se não, continua aguardando! 
 
         setTimeout(() => {
             this.MudarTela('Buttons', latitude, longitude);
@@ -73,9 +96,8 @@ export default class ExibeImagemScreen extends React.Component {
     }
 
     MudarTela(NMPagina, latitude, longitude) {
-        console.log('Link para Donwload da imagem Maravilhosa!: ' + LinkDownload);
-        this.props.navigation.navigate(NMPagina, {latitude, longitude, LinkDownload});
-        
+        this.props.navigation.navigate(NMPagina, { latitude, longitude, LinkDownload });
+
     }
 }
 
@@ -89,8 +111,32 @@ uploadImageAsync = async (uri, imageName) => {
     const snapshot = await ref.put(blob);
 
     LinkDownload = await snapshot.ref.getDownloadURL();
-    console.log("Deveria mostrar: "+ LinkDownload);
+    console.log("Deveria mostrar: " + LinkDownload);
 
     return await snapshot.ref.getDownloadURL();
 
 }
+
+const styles = StyleSheet.create({
+    TextStyle: {
+        color: '#000',
+        textAlign: 'center',
+        fontSize: 18,
+        marginTop: 5,
+    },
+    TextSmall: {
+        color: '#000',
+        textAlign: 'center',
+        fontSize: 8,
+        marginTop: 5,
+    },
+
+    container: {
+        backgroundColor: '#fff',
+        alignContent: 'center',
+        width: SCREENWIDTH,
+        height: SCREENHEIGHT,
+        marginLeft: 10,
+        marginRight: 10,
+    },
+});
