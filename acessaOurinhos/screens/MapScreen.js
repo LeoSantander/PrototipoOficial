@@ -17,7 +17,6 @@ import * as Permissions from 'expo-permissions';
 import MapView, { Marker } from 'react-native-maps';
 import firebase from 'firebase';
 
-
 function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -63,6 +62,7 @@ export default class MapScreen extends React.Component {
       places: [],
       data: [],
       content: false,
+      mostra: false,
     };
 
     this.handlePress = this.handlePress.bind(this);
@@ -103,8 +103,7 @@ export default class MapScreen extends React.Component {
     this.setState({ markerPosition: initialRegion })
   };
 
-  componentDidMount() {
-
+  coisas() {
     const { navigation } = this.props;
     this.focusListener = navigation.addListener("didFocus", () => {
       this.forceUpdate();
@@ -113,17 +112,6 @@ export default class MapScreen extends React.Component {
     var that = this;
 
     that._isMounted = true;
-
-    var firebaseConfig = {
-      apiKey: "AIzaSyD0GlOQKQcpHg7n00ZxbTWmaOfF4rTEomU",
-      authDomain: "trabgrad-66a7f.firebaseapp.com",
-      databaseURL: "https://trabgrad-66a7f.firebaseio.com",
-      projectId: "trabgrad-66a7f",
-      storageBucket: "trabgrad-66a7f.appspot.com",
-      messagingSenderId: "606095334755"
-    };
-
-    firebase.initializeApp(firebaseConfig);
 
     var rootRef = firebase.database().ref();
     var ref = rootRef.child("users");
@@ -136,7 +124,25 @@ export default class MapScreen extends React.Component {
         that.setState({ isLoading: false });
       }
     });
+  }
 
+  conecta() {
+    var firebaseConfig = {
+      apiKey: "AIzaSyD0GlOQKQcpHg7n00ZxbTWmaOfF4rTEomU",
+      authDomain: "trabgrad-66a7f.firebaseapp.com",
+      databaseURL: "https://trabgrad-66a7f.firebaseio.com",
+      projectId: "trabgrad-66a7f",
+      storageBucket: "trabgrad-66a7f.appspot.com",
+      messagingSenderId: "606095334755"
+    };
+
+    return firebase.initializeApp(firebaseConfig);
+  }
+
+  componentDidMount() {
+
+    this.conecta();
+    this.coisas();
   }
 
   handlePress(e) {
@@ -149,7 +155,9 @@ export default class MapScreen extends React.Component {
         }
       ]
     });
+    this.forceUpdate();
     this.props.navigation.navigate('Capture', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
+
   }
 
   componentWillUnmount() {
@@ -163,6 +171,7 @@ export default class MapScreen extends React.Component {
   }
 
   render() {
+
     if (this.state.isLoading) {
       return (
         <View style={styles.container}>
@@ -174,6 +183,7 @@ export default class MapScreen extends React.Component {
     }
 
     else {
+
       const array = Object.values(this.state.places);
       const { latitude, longitude } = array[0];
 
@@ -260,30 +270,39 @@ export default class MapScreen extends React.Component {
               >
                 {array.map((place, index) => (
                   <View key={index} style={styles.place}>
-                    <View style={{ margin: 10 }}>
+                    <TouchableOpacity onPress={this.componentHideAndShow} >
+                        <Text style={{ paddingTop: 10, paddingRight: 10,color: 'red', textAlign: 'right', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>X</Text>
+                      </TouchableOpacity>
+                    <ScrollView style={{ margin: 10 }}>
+                    {
+                        place.Download != '' ? <Image
+                          style={{ width: SCREENWIDTH-20, height: SCREENHEIGHT/2-20 }}
+                          source={{ uri: place.Download }}
+                        /> : <Image
+                        style={{ width: SCREENWIDTH-20, height: SCREENHEIGHT/2-20 }}
+                        source={require('../assets/images/insti.png')}
+                      />
+                      }
                       <Text style={{ paddingTop: 10, color: '#000', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Endereço:</Text>
                       <Text>{place.endereco}</Text>
                       <Text style={{ paddingTop: 10, color: '#000', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Reclamação: {place.problema}</Text>
                       <Text>{place.especificacao} - {place.detalhe}</Text>
                       <Text>{place.observacao}</Text>
                       <View style={{ height: 10 }}></View>
-                      <TouchableOpacity onPress={this.componentHideAndShow} >
-                        <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ocultar Detalhes</Text>
-                      </TouchableOpacity>
-                    </View>
+                    </ScrollView>
                   </View>
                 ))}
 
               </ScrollView> : <View><TouchableOpacity onPress={this.componentHideAndShow} >
                 <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
               </TouchableOpacity>
-              <Image source={require('../assets/images/logo-insti.png')} style={{ width: 55, height: 45.7, position: 'absolute',bottom:0,}} />
+                <Image source={require('../assets/images/logo-insti.png')} style={{ width: 55, height: 45.7, position: 'absolute', bottom: 0, }} />
               </View>
-              
+
           }
 
-          
-          
+
+
 
         </View>
       );
@@ -343,7 +362,7 @@ const styles = StyleSheet.create({
   },
   placeContainer: {
     width: '100%',
-    maxHeight: 250,
+    height: '100%',
   },
   place: {
     width: width,
