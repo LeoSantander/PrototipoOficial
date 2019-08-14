@@ -1,18 +1,12 @@
 import React from 'react';
-import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Platform, Dimensions } from 'react-native';
+import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Platform, Dimensions, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
-import Load from "react-native-loading-gif";
 import { ScrollView } from 'react-native-gesture-handler';
 
-global.LinkDownload = '';
-
 const { height, width } = Dimensions.get('window');
-
 const SCREENHEIGHT = height;
 const SCREENWIDTH = width - 20;
-
-
 
 export default class ExibeImagemScreen extends React.Component {
 
@@ -93,7 +87,12 @@ export default class ExibeImagemScreen extends React.Component {
 
 
         return ref.put(blob).then(() => {
-            alert("success");
+            Alert.alert(
+                'Sucesso',
+                'O processamento da sua imagem foi concluído com sucesso!',
+                [
+                    { text: 'Continuar', onPress: () => console.log('OK Pressed') },
+                ])
             return ref.getDownloadURL()
                 .then((url) => {
                     this.MudarTela('Buttons', latitude, longitude, url);

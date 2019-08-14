@@ -12,6 +12,7 @@ import InsertPredioScreen from '../screens/InsertPredioScreen';
 import ButtonsScreen from '../screens/ButtonsScreen';
 import CaptureScreen from '../screens/CaptureScreen';
 import ExibeImagemScreen from '../screens/ExibeImagemScreen';
+import SuccessScreen from '../screens/SuccessScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -51,6 +52,7 @@ const MapStack = createStackNavigator(
     PredioInsert: InsertPredioScreen,
     Capture: CaptureScreen,
     ExibeImagem: ExibeImagemScreen,
+    Success: SuccessScreen,
   },
   config
 );
