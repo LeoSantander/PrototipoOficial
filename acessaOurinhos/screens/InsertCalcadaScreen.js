@@ -267,7 +267,7 @@ export default class InsertCalcadaScreen extends React.Component {
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
-    const Download = navigation.getParam('LinkDownload');
+    const Download = navigation.getParam('link');
 
 
     // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.

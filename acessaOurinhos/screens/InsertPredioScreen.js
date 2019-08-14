@@ -208,7 +208,7 @@ export default class InsertPredioScreen extends React.Component {
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
-    const Download = navigation.getParam('LinkDownload');
+    const Download = navigation.getParam('link');
 
     // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
     Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");

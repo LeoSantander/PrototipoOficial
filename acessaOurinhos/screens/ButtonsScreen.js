@@ -18,23 +18,22 @@ export default class ButtonsScreen extends React.Component{
         }
       }
       
-    
       render(){
         const { navigation } = this.props;
         const latitude = navigation.getParam('latitude');
         const longitude = navigation.getParam('longitude');
-        const LinkDownload = navigation.getParam('LinkDownload');
-        
+        const link = navigation.getParam('url');
+
         return(
-            
             <View style={styles.container}>
               <ScrollView>
                 <Text style={styles.welcome}>Onde se encontra o problema?</Text>
                 <View style={styles.geral}>
+                  
                     <Button
                         icon={{name: 'arrow-up', type: 'font-awesome'}}
                         title='Calçadas' 
-                        onPress={() => this.props.navigation.navigate('CalcadaInsert', {latitude: latitude, longitude: longitude, LinkDownload})}>
+                        onPress={() => this.props.navigation.navigate('CalcadaInsert', {latitude: latitude, longitude: longitude, link})}>
                     </Button>
                 </View>
 
@@ -42,7 +41,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'road', type: 'font-awesome'}}
                         title='Ruas' 
-                        onPress={() => this.props.navigation.navigate('RuaInsert', {latitude: latitude, longitude: longitude, LinkDownload})}>
+                        onPress={() => this.props.navigation.navigate('RuaInsert', {latitude: latitude, longitude: longitude, link})}>
                     </Button>
                 </View>
 
@@ -50,7 +49,7 @@ export default class ButtonsScreen extends React.Component{
                     <Button
                         icon={{name: 'building', type: 'font-awesome'}}
                         title='Prédios' 
-                        onPress={() => this.props.navigation.navigate('PredioInsert', {latitude: latitude, longitude: longitude, LinkDownload})}>
+                        onPress={() => this.props.navigation.navigate('PredioInsert', {latitude: latitude, longitude: longitude, link})}>
                     </Button>
                 </View>
                 

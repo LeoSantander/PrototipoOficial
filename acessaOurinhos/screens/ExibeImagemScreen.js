@@ -3,6 +3,7 @@ import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Pla
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
 import Load from "react-native-loading-gif";
+import { ScrollView } from 'react-native-gesture-handler';
 
 global.LinkDownload = '';
 
@@ -23,7 +24,6 @@ export default class ExibeImagemScreen extends React.Component {
             image: null,
             uploading: false,
             isLoading: false,
-            download: '',
         }
     };
 
@@ -37,37 +37,39 @@ export default class ExibeImagemScreen extends React.Component {
         if (this.state.isLoading == false) {
             return (
                 <View style={styles.container}>
-                    <Image
-                        style={{ width: SCREENWIDTH, height: 400, }}
-                        source={{ uri: photo.uri }}
-                    />
+                    <ScrollView>
+                        <Image
+                            style={{ width: SCREENWIDTH, height: SCREENHEIGHT/2, }}
+                            source={{ uri: photo.uri }}
+                        />
 
-                    <Button
-                        style={{ marginTop: 20, marginBottom: 20 }}
-                        disabled={this.state.isLoading}
-                        large
-                        title='Cancelar'
-                        onPress={() => this.props.navigation.navigate('Capture')}
-                    />
+                        <Button
+                            style={{ marginTop: 20, marginBottom: 20 }}
+                            disabled={this.state.isLoading}
+                            large
+                            title='Cancelar'
+                            onPress={() => this.props.navigation.navigate('Capture')}
+                        />
 
-                    <Button
-                        disabled={this.state.isLoading}
-                        large
-                        icon={{ name: 'save', type: 'font-awesome' }}
-                        title='Salvar'
-                        onPress={() => this.enviar(latitude, longitude)}
-                    />
+                        <Button
+                            disabled={this.state.isLoading}
+                            large
+                            icon={{ name: 'save', type: 'font-awesome' }}
+                            title='Salvar'
+                            onPress={() => this.uploadImage(latitude, longitude, photo.uri)}
+                        />
+                    </ScrollView>
                 </View>
             );
         } else {
             return (
                 <View style={styles.container}>
                     <Image
-                        style={{ width: SCREENWIDTH, height: 400, }}
+                        style={{ width: SCREENWIDTH, height: SCREENHEIGHT/2, }}
                         source={{ uri: photo.uri }}
                     />
                     <View style={{ flex: 1, padding: 20 }}>
-                    <ActivityIndicator />
+                        <ActivityIndicator />
                         <Text style={styles.TextStyle}>Sua imagem esta sendo processada! Aguarde...</Text>
                         <Text style={styles.TextSmall}>O tempo de envio varia de acordo com a velocidade da sua conexão!</Text>
                     </View>
@@ -79,42 +81,32 @@ export default class ExibeImagemScreen extends React.Component {
 
     }
 
-    enviar(latitude, longitude) {
+    uploadImage = async (latitude, longitude, uri) => {
 
         this.setState(function () { return { isLoading: true } });
-
         var NomeArq = latitude + '_' + longitude;
-        uploadImageAsync(photo.uri, NomeArq);
 
-        // No Lugar desse seTimeout, validar ser a Var Global LinkDonwload está setada:
-        // - Se Houver valor setado, chama a função MudarTela, se não, continua aguardando! 
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        var ref = firebase.storage().ref().child("images/" + NomeArq);
 
-        setTimeout(() => {
-            this.MudarTela('Buttons', latitude, longitude);
-        }, 30000);
 
+
+        return ref.put(blob).then(() => {
+            alert("success");
+            return ref.getDownloadURL()
+                .then((url) => {
+                    this.MudarTela('Buttons', latitude, longitude, url);
+                });
+        }).catch((error) => {
+            alert(error);
+        });
     }
 
-    MudarTela(NMPagina, latitude, longitude) {
-        this.props.navigation.navigate(NMPagina, { latitude, longitude, LinkDownload });
+    MudarTela(NMPagina, latitude, longitude, url) {
+        this.props.navigation.navigate(NMPagina, { latitude, longitude, url });
 
     }
-}
-
-uploadImageAsync = async (uri, imageName) => {
-
-    const response = await fetch(uri);
-    const blob = await response.blob();
-
-    var ref = firebase.storage().ref().child("images/" + imageName);
-
-    const snapshot = await ref.put(blob);
-
-    LinkDownload = await snapshot.ref.getDownloadURL();
-    console.log("Deveria mostrar: " + LinkDownload);
-
-    return await snapshot.ref.getDownloadURL();
-
 }
 
 const styles = StyleSheet.create({
