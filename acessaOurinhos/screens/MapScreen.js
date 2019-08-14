@@ -296,7 +296,7 @@ export default class MapScreen extends React.Component {
               </ScrollView> : <View><TouchableOpacity onPress={this.componentHideAndShow} >
                 <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
               </TouchableOpacity>
-                <Image source={require('../assets/images/logo-insti.png')} style={{ width: 55, height: 45.7, position: 'absolute', bottom: 0, }} />
+                <Image source={require('../assets/images/legenda.png')} style={{ width: 55, height: 45.7, position: 'absolute', bottom: 0, }} />
               </View>
 
           }
