@@ -2,7 +2,6 @@ import React from 'react';
 import { ActivityIndicator, Text, View, TouchableOpacity, StyleSheet, Image, Platform, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 import firebase from 'firebase';
-import Load from "react-native-loading-gif";
 import { ScrollView } from 'react-native-gesture-handler';
 
 global.LinkDownload = '';
