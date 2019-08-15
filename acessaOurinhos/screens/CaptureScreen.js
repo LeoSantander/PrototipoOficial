@@ -63,13 +63,14 @@ export default class CaptureScreen extends React.Component {
                             }}>
                         </View>
                     </Camera>
+                    <View style={{marginLeft:10, marginRight: 10, marginBottom: 50}}>
                     <Button
-                        style={{ marginLeft: 50, marginRight: 50, marginBottom: 50 }}
                         large
                         icon={{ name: 'camera', type: 'font-awesome' }}
                         title='Capturar'
                         onPress={() => this.takePicture(latitude, longitude)}
                     />
+                    </View>
                 </View>
             );
         }

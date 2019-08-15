@@ -33,25 +33,28 @@ export default class ExibeImagemScreen extends React.Component {
                 <View style={styles.container}>
                     <ScrollView>
                         <Image
-                            style={{ width: SCREENWIDTH, height: SCREENHEIGHT/2, }}
+                            style={{ width: SCREENWIDTH, height: SCREENHEIGHT / 2, }}
                             source={{ uri: photo.uri }}
                         />
 
-                        <Button
-                            style={{ marginTop: 20, marginBottom: 20 }}
-                            disabled={this.state.isLoading}
-                            large
-                            title='Cancelar'
-                            onPress={() => this.props.navigation.navigate('Capture')}
-                        />
+                        <View style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
+                            <Button
+                                disabled={this.state.isLoading}
+                                large
+                                title='Cancelar'
+                                onPress={() => this.props.navigation.navigate('Capture')}
+                            />
+                        </View>
 
-                        <Button
-                            disabled={this.state.isLoading}
-                            large
-                            icon={{ name: 'save', type: 'font-awesome' }}
-                            title='Salvar'
-                            onPress={() => this.uploadImage(latitude, longitude, photo.uri)}
-                        />
+                        <View style={{ marginTop: 20, marginBottom: 20, marginLeft: 10, marginRight: 10 }}>
+                            <Button
+                                disabled={this.state.isLoading}
+                                large
+                                icon={{ name: 'save', type: 'font-awesome' }}
+                                title='Salvar'
+                                onPress={() => this.uploadImage(latitude, longitude, photo.uri)}
+                            />
+                        </View>
                     </ScrollView>
                 </View>
             );
@@ -59,7 +62,7 @@ export default class ExibeImagemScreen extends React.Component {
             return (
                 <View style={styles.container}>
                     <Image
-                        style={{ width: SCREENWIDTH, height: SCREENHEIGHT/2, }}
+                        style={{ width: SCREENWIDTH, height: SCREENHEIGHT / 2, }}
                         source={{ uri: photo.uri }}
                     />
                     <View style={{ flex: 1, padding: 20 }}>

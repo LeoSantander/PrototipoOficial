@@ -155,7 +155,7 @@ export default class MapScreen extends React.Component {
         }
       ]
     });
-    this.forceUpdate();
+    //this.forceUpdate();
     this.props.navigation.navigate('Capture', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
 
   }
@@ -223,8 +223,8 @@ export default class MapScreen extends React.Component {
                   place.problema == 'Calçadas' ?
                     <Image source={require('../assets/images/marker.png')} style={{ height: 35, width: 35 }} /> :
                     place.problema == 'Ruas' ?
-                      <Image source={require('../assets/images/marker-blue.png')} style={{ height: 35, width: 35 }} /> :
-                      <Image source={require('../assets/images/marker-green.png')} style={{ height: 35, width: 35 }} />
+                      <Image source={require('../assets/images/marker-green.png')} style={{ height: 35, width: 35 }} /> :
+                      <Image source={require('../assets/images/marker-blue.png')} style={{ height: 35, width: 35 }} />
                 }
 
               </MapView.Marker>
@@ -294,9 +294,9 @@ export default class MapScreen extends React.Component {
                 ))}
 
               </ScrollView> : <View><TouchableOpacity onPress={this.componentHideAndShow} >
-                <Text style={{ paddingTop: 10, color: 'red', textAlign: 'center', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
+                <Text style={{ paddingTop: 10, color: 'red', textAlign: 'right', paddingBottom: 10, paddingRight:5,  fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
               </TouchableOpacity>
-                <Image source={require('../assets/images/legenda.png')} style={{ width: 55, height: 45.7, position: 'absolute', bottom: 0, }} />
+                <Image source={require('../assets/images/legenda.png')} style={{ width: SCREENWIDTH/2, height: SCREENWIDTH/2, position: 'absolute', bottom: 0, }} />
               </View>
 
           }

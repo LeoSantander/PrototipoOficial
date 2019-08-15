@@ -46,6 +46,7 @@ export default class HomeScreen extends React.Component {
               title='Indicar uma Irregularidade'
               onPress={() => this.props.navigation.navigate('Mapa')}
             />
+            <View style={{height:10}}></View>
             <Button
               style={{ marginLeft: 50, marginRight: 50 }}
               large
@@ -95,7 +96,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: 30
+    marginTop: 30,
+    marginLeft: 10,
+    marginRight: 10,
   },
   developmentModeText: {
     marginBottom: 20,
