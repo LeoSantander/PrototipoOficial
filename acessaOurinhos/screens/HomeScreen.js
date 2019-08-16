@@ -8,9 +8,15 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import { MonoText } from '../components/StyledText';
+
+const { height, width } = Dimensions.get('window');
+
+const SCREENHEIGHT = height;
+const SCREENWIDTH = width;
 
 export default class HomeScreen extends React.Component {
 
@@ -20,7 +26,7 @@ export default class HomeScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <ScrollView
           style={styles.container}
           contentContainerStyle={styles.contentContainer}>
@@ -38,22 +44,28 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
 
             <Text style={styles.getStartedTextBig}>Bem vindo</Text>
+            <Text style={styles.getStartedText}>Para indicar irregularidades, clique no botão abaixo e navegue pelo mapa:</Text>
 
-            <Button
-              style={{ marginLeft: 50, marginRight: 50, marginBottom: 20 }}
-              large
-              icon={{ name: 'map', type: 'font-awesome' }}
-              title='Indicar uma Irregularidade'
-              onPress={() => this.props.navigation.navigate('Mapa')}
-            />
-            <View style={{height:10}}></View>
-            <Button
-              style={{ marginLeft: 50, marginRight: 50 }}
-              large
-              icon={{ name: 'book', type: 'font-awesome' }}
-              title='Conheça o Projeto'
-              onPress={() => this.props.navigation.navigate('About')}
-            />
+            <TouchableOpacity style={{ alignSelf: 'center', 
+                                       backgroundColor:'#0984ec', 
+                                       width: SCREENWIDTH -60,
+                                       borderRadius: 60,
+                                       alignContent: 'center',
+                                       alignItems: 'center',
+                                       padding: 20,}} onPress={() => this.props.navigation.navigate('Mapa')}>{this.props.type}
+              <View style = {{flexDirection: 'row', alignSelf: 'center'}}>
+                <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/mapwhite.png")}></Image>
+                <Text style={{color: '#FFFFFF', marginLeft: 10, fontSize: 20}}>Ir para o Mapa</Text>
+              </View>
+            </TouchableOpacity>
+            
+            <View style={{ height: 10 }}></View>
+            <TouchableOpacity style={{ marginLeft: 50, marginRight: 50, alignSelf: 'center', marginTop:15 }} onPress={() => this.props.navigation.navigate('About')}>{this.props.type}
+              <View style = {{flexDirection: 'row', alignSelf: 'flex-start'}}>
+                <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/infoblue.png")}></Image>
+                <Text style={{paddingTop:5, color: '#0984ec', marginLeft: 10,}}>Conheça o Projeto</Text>
+              </View>
+            </TouchableOpacity>
 
           </View>
 
@@ -96,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    marginTop: 30,
+    marginTop: 10,
     marginLeft: 10,
     marginRight: 10,
   },
@@ -108,7 +120,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
-    paddingTop: 30
+    paddingTop: 10
   },
   desc: {
     paddingTop: 30,
@@ -117,14 +129,11 @@ const styles = StyleSheet.create({
   },
   welcomeContainer: {
     alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
   },
   welcomeImage: {
-    width: 100,
-    height: 80,
+    width: 250,
+    height: 200,
     resizeMode: 'contain',
-    marginTop: 3,
     marginLeft: -10,
   },
   Topo: {
@@ -147,7 +156,7 @@ const styles = StyleSheet.create({
     color: 'rgba(96,100,109, 1)',
     lineHeight: 24,
     textAlign: 'center',
-    marginTop: 30
+    marginBottom:30
   },
   getStartedTextBig: {
     fontSize: 25,
@@ -155,7 +164,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
     marginTop: 20,
-    marginBottom: 30
+    marginBottom: 10
   },
   tabBarInfoContainer: {
     position: 'absolute',
@@ -196,4 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  getStartedContainer:{
+    paddingBottom: 100, 
+  }
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Image } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -13,6 +13,7 @@ import ButtonsScreen from '../screens/ButtonsScreen';
 import CaptureScreen from '../screens/CaptureScreen';
 import ExibeImagemScreen from '../screens/ExibeImagemScreen';
 import SuccessScreen from '../screens/SuccessScreen';
+
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -28,16 +29,17 @@ const HomeStack = createStackNavigator(
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-home`
-          : 'md-home'
-      }
-    />
-  ),
+  tabBarIcon: ({ focused }) => {
+    return (
+      focused == true ?
+        <Image
+          style={{ width: 25, height: 25 }}
+          source={require("../assets/images/icons/homeblue.png")} /> :
+          <Image
+          style={{ width: 25, height: 25 }}
+          source={require("../assets/images/icons/home.png")} />
+        );
+  }
 };
 
 HomeStack.path = '';
@@ -58,10 +60,18 @@ const MapStack = createStackNavigator(
 );
 
 MapStack.navigationOptions = {
-  tabBarLabel: 'Mapa', 
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-map' : 'md-map'} />
-  ),
+  tabBarLabel: 'Mapa',
+  tabBarIcon: ({ focused }) => {
+    return (
+      focused == true ?
+        <Image
+          style={{ width: 25, height: 25 }}
+          source={require("../assets/images/icons/mapblue.png")} /> :
+          <Image
+          style={{ width: 25, height: 25 }}
+          source={require("../assets/images/icons/map.png")} />
+        );
+  }
 };
 
 MapStack.path = '';
@@ -75,9 +85,17 @@ const AboutStack = createStackNavigator(
 
 AboutStack.navigationOptions = {
   tabBarLabel: 'Sobre o Projeto',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-book' : 'md-book'} />
-  ),
+  tabBarIcon: ({ focused }) => {
+    return (
+      focused == true ?
+        <Image
+          style={{ width: 25, height: 25 }}
+          source={require("../assets/images/icons/infoblue.png")} /> :
+          <Image
+          style={{ width: 25, height: 25 }}
+          source={require("../assets/images/icons/info.png")} />
+        );
+  }
 };
 
 AboutStack.path = '';
