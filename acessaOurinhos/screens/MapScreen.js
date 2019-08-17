@@ -147,18 +147,22 @@ export default class MapScreen extends React.Component {
   }
 
   handlePress(e) {
-    this.setState({
-      markers: [
-        ...this.state.markers,
-        {
-          coordinate: e.nativeEvent.coordinate,
-          cost: '$${getRandomInt(50, 300)}',
-        }
-      ]
-    });
-    //this.forceUpdate();
-    this.props.navigation.navigate('Capture', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
-
+    try{
+      this.setState({
+        markers: [
+          ...this.state.markers,
+          {
+            coordinate: e.nativeEvent.coordinate,
+            cost: '$${getRandomInt(50, 300)}',
+          }
+        ]
+      });
+      //this.forceUpdate();
+      this.props.navigation.navigate('Reclamacoes', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
+    }catch(e){
+      console.log(e);
+    }
+      
   }
 
   componentWillUnmount() {
@@ -190,7 +194,7 @@ export default class MapScreen extends React.Component {
 
       return (
         <View style={styles.container}>
-          
+
           <MapView
             ref={map => this.mapView = map}
             region={this.state.initialPosition}
@@ -239,23 +243,6 @@ export default class MapScreen extends React.Component {
                 showsHorizontalScrollIndicator={false}
                 pagingEnabled
                 visible={this.state.pickerDisplayed2}
-                onMomentumScrollEnd={(e) => {
-                  const place = (e.nativeEvent.contentOffset.x > 0)
-                    ? e.nativeEvent.contentOffset.x / Dimensions.get('window').width
-                    : 0;
-
-                  const { latitude, longitude, mark } = this.state.places[place];
-
-                  this.mapView.animateToCoordinate({
-                    latitude,
-                    longitude
-                  }, 1000);
-
-                  setTimeout(() => {
-                    mark.showCallout();
-                  }, 500);
-
-                }}
               >
                 {array.map((place, index) => (
                   <View key={index} style={styles.place}>
@@ -264,12 +251,12 @@ export default class MapScreen extends React.Component {
                     </TouchableOpacity>
                     <ScrollView style={{ margin: 10 }}>
                       {
-                        place.Download != '' ? <Image
+                        place.Download != 'n' ? <Image
                           style={{ width: SCREENWIDTH - 20, height: SCREENHEIGHT / 2 - 20 }}
                           source={{ uri: place.Download }}
                         /> : <Image
-                            style={{ width: SCREENWIDTH - 20, height: SCREENHEIGHT / 2 - 20 }}
-                            source={require('../assets/images/insti.png')}
+                            style={{ width: SCREENWIDTH - 150, height: SCREENHEIGHT / 2 - 150,alignSelf:'center' }}
+                            source={require('../assets/images/icon-logo.png')}
                           />
                       }
                       <Text style={{ paddingTop: 10, color: '#000', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Endereço:</Text>
@@ -289,10 +276,6 @@ export default class MapScreen extends React.Component {
               </View>
 
           }
-
-
-
-
         </View>
       );
     }
@@ -305,11 +288,11 @@ MapScreen.navigationOptions = {
     <TouchableOpacity
       onPress={() => Alert.alert(
         'Está com dúvidas?',
-        '\nPara adicionar uma reclamação, basta clicar no mapa, no local onde se encontra o problema.\n\nO botao "Ver Detalhes", permite ter uma visão sobre uma reclamação já cadastrada e ver a foto desse problema.\n\nA legenda indica os tipos de reclamações já cadastradas.',
+        '\n1. Para adicionar uma reclamação, basta clicar no mapa, no local onde se encontra o problema.\n\n2. Segure sobre uma marca de reclamação no mapa e veja qual é o problema naquele local.\n\n3. O botao "Ver Detalhes", permite ter uma visão sobre uma reclamação já cadastrada e ver a foto desse problema.\n\n4. A legenda indica os tipos de reclamações já cadastradas.',
       )}
-      
+
     >
-      <Image style={{ width: 25, height: 25,marginRight:5,}} source={require("../assets/images/icons/infoblue.png")} />
+      <Image style={{ width: 25, height: 25, marginRight: 5, }} source={require("../assets/images/icons/infoblue.png")} />
     </TouchableOpacity>
   ),
 };
@@ -323,10 +306,10 @@ const styles = StyleSheet.create({
   },
 
   radius: {
-    height: 50,
-    width: 50,
+    height: 70,
+    width: 70,
     backgroundColor: 'rgba(0,155,155,0.1)',
-    borderRadius: 25,
+    borderRadius: 35,
     borderColor: 'rgba(0,155,155,0.3)',
     overflow: 'hidden',
     borderWidth: 1,
@@ -340,7 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: 'white',
-    backgroundColor: 'red'
+    backgroundColor: '#0984ec'
   },
 
   titulo: {
