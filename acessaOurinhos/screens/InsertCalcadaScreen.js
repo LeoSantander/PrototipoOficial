@@ -8,6 +8,7 @@ import {
   ScrollView,
   View,
   Modal,
+  Image,
   TouchableOpacity,
   KeyboardAvoidingView,
   TouchableHighlight,
@@ -22,7 +23,7 @@ import Geocode from "react-geocode";
 import ExibeImagemScreen from './ExibeImagemScreen';
 
 const SCREENWIDTH = Dimensions.get('window').width; //full width
-var height = Dimensions.get('window').height; //full height
+const SCREENHEIGTH = Dimensions.get('window').heigth; //full height
 
 const validationSchema = yup.object().shape({
   observacao: yup
@@ -379,31 +380,54 @@ export default class InsertCalcadaScreen extends React.Component {
                       <View style={{
                         backgroundColor: '#efefef',
                         marginBottom: 30,
-                        height: 200,
+                        paddingTop: 50,
+                        height: 550,
                         width: SCREENWIDTH,
                         bottom: 18,
                         position: 'absolute'
                       }}>
                         <ScrollView style={{ width: SCREENWIDTH, paddingLeft: 10, paddingRight: 10 }}>
                           <Text style={{
-                            fontSize: 18, fontWeight: 'bold', paddingTop: 10, paddingBottom: 10, alignItems: 'center',
+                            fontSize: 18, fontWeight: 'bold', paddingTop: 40, paddingBottom: 10, alignItems: 'center',
                             justifyContent: 'center', alignSelf: 'center'
                           }}>Escolha Um problema</Text>
                           {pickerProblema.map((value, index) => {
 
-                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address); formikProps.setFieldValue('Download', Download) }} style={{
-                              paddingTop: 4, paddingBottom: 4, alignItems: 'center',
-                              justifyContent: 'center',
-                            }}>
-                              <Text>{value.title}</Text>
+                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address); formikProps.setFieldValue('Download', Download) }}
+                              style={{ paddingTop: 4, paddingBottom: 4, }}>
+                              <View style={{ flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                <Image style={{ width: 40, height: 40, marginLeft: 10, }}
+                                  source={
+                                    value.value == 'Árvores' ?
+                                      require("../assets/images/icones/arvore.png") :
+                                    value.value == 'Cobertura nos pontos de ônibus' ?
+                                      require("../assets/images/icones/onibus.png") :
+                                    value.value == 'Iluminação pública' ?
+                                      require("../assets/images/icones/luz.png") :
+                                    value.value == 'Obstáculos' ?
+                                      require("../assets/images/icones/Entulho.png") :
+                                    value.value == 'Piso' ?
+                                      require("../assets/images/icones/calcada.png") :
+                                    value.value == 'Placas, lixeiras, postes e outros' ?
+                                      require("../assets/images/icones/Lixeira.png") :
+                                    value.value == 'Pontos de ônibus' ?
+                                      require("../assets/images/icones/onibus.png") :
+                                    value.value == 'Rampas' ?
+                                      require("../assets/images/icones/Rampa.png") :
+                                        require("../assets/images/icones/Placas.png")}>
+
+                                </Image>
+                                <Text style={{ fontSize: 18, paddingTop: 10, marginLeft: 5, width: SCREENWIDTH - 80 }}>{value.title}</Text>
+                              </View>
                             </TouchableHighlight>
+
                           })}
                         </ScrollView>
                         <TouchableHighlight onPress={() => this.togglePicker()} style={{
                           paddingTop: 4, paddingBottom: 4, alignItems: 'center',
                           justifyContent: 'center',
                         }}>
-                          <Text style={{ paddingTop: 10, color: '#999', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Cancelar</Text>
+                          <Text style={{ paddingTop: 10, color: 'red', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Cancelar</Text>
                         </TouchableHighlight>
                       </View>
                     </Modal>

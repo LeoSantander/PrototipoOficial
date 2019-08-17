@@ -7,6 +7,7 @@ import {
   ScrollView,
   Button,
   Image,
+  Alert,
   Dimensions,
   TouchableOpacity,
   ActivityIndicator
@@ -189,25 +190,13 @@ export default class MapScreen extends React.Component {
 
       return (
         <View style={styles.container}>
+          
           <MapView
             ref={map => this.mapView = map}
             region={this.state.initialPosition}
             onPress={this.handlePress}
             style={styles.MapView}
           >
-
-            {this.state.markers.map((marker, index) => {
-              return (
-                <MapView.Marker {...marker}
-                  ref={mark => marker.mark = mark}
-                  title='Nova Reclamação'
-                  key={index}
-                  description={'Latitude: ' + marker.coordinate.latitude + 'Longitude: ' + marker.coordinate.longitude}
-                >
-                </MapView.Marker>
-              )
-            })}
-
             {array.map((place, index) => (
 
               <MapView.Marker
@@ -271,17 +260,17 @@ export default class MapScreen extends React.Component {
                 {array.map((place, index) => (
                   <View key={index} style={styles.place}>
                     <TouchableOpacity onPress={this.componentHideAndShow} >
-                        <Text style={{ paddingTop: 10, paddingRight: 10,color: 'red', textAlign: 'right', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>X</Text>
-                      </TouchableOpacity>
+                      <Text style={{ paddingTop: 10, paddingRight: 10, color: 'red', textAlign: 'right', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>X</Text>
+                    </TouchableOpacity>
                     <ScrollView style={{ margin: 10 }}>
-                    {
+                      {
                         place.Download != '' ? <Image
-                          style={{ width: SCREENWIDTH-20, height: SCREENHEIGHT/2-20 }}
+                          style={{ width: SCREENWIDTH - 20, height: SCREENHEIGHT / 2 - 20 }}
                           source={{ uri: place.Download }}
                         /> : <Image
-                        style={{ width: SCREENWIDTH-20, height: SCREENHEIGHT/2-20 }}
-                        source={require('../assets/images/insti.png')}
-                      />
+                            style={{ width: SCREENWIDTH - 20, height: SCREENHEIGHT / 2 - 20 }}
+                            source={require('../assets/images/insti.png')}
+                          />
                       }
                       <Text style={{ paddingTop: 10, color: '#000', paddingBottom: 10, fontSize: 18, fontWeight: 'bold' }}>Endereço:</Text>
                       <Text>{place.endereco}</Text>
@@ -294,9 +283,9 @@ export default class MapScreen extends React.Component {
                 ))}
 
               </ScrollView> : <View><TouchableOpacity onPress={this.componentHideAndShow} >
-                <Text style={{ paddingTop: 10, color: 'red', textAlign: 'right', paddingBottom: 10, paddingRight:5,  fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
+                <Text style={{ paddingTop: 10, color: 'red', textAlign: 'right', paddingBottom: 10, paddingRight: 5, fontSize: 18, fontWeight: 'bold' }}>Ver Detalhes</Text>
               </TouchableOpacity>
-                <Image source={require('../assets/images/legenda.png')} style={{ width: SCREENWIDTH/2, height: SCREENWIDTH/2, position: 'absolute', bottom: 0, }} />
+                <Image source={require('../assets/images/legenda.png')} style={{ width: SCREENWIDTH / 2, height: SCREENWIDTH / 2, position: 'absolute', bottom: 0, }} />
               </View>
 
           }
@@ -312,6 +301,17 @@ export default class MapScreen extends React.Component {
 
 MapScreen.navigationOptions = {
   title: 'Mapa',
+  headerRight: (
+    <TouchableOpacity
+      onPress={() => Alert.alert(
+        'Está com dúvidas?',
+        '\nPara adicionar uma reclamação, basta clicar no mapa, no local onde se encontra o problema.\n\nO botao "Ver Detalhes", permite ter uma visão sobre uma reclamação já cadastrada e ver a foto desse problema.\n\nA legenda indica os tipos de reclamações já cadastradas.',
+      )}
+      
+    >
+      <Image style={{ width: 25, height: 25,marginRight:5,}} source={require("../assets/images/icons/infoblue.png")} />
+    </TouchableOpacity>
+  ),
 };
 
 const styles = StyleSheet.create({
