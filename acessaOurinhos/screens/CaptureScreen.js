@@ -38,12 +38,12 @@ export default class CaptureScreen extends React.Component {
                 [
                     { text: 'Enviar um Foto', onPress: () => console.log('OK Pressed') },
                     { text: 'Não Enviar', onPress: () => this.props.navigation.navigate('Buttons', {latitude, longitude}) },
-                ])
+                ]);
     
             const { navigation } = this.props;
             const latitude = navigation.getParam('latitude');
             const longitude = navigation.getParam('longitude');
-            
+
             return (
                 
                 <View style={{ flex: 1 }}>
