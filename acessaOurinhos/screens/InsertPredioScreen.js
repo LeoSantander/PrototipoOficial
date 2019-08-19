@@ -285,7 +285,7 @@ export default class InsertPredioScreen extends React.Component {
                 }, 1000);
 
                 Alert.alert("Obrigado!", "Sua reclamação foi adicionada! Agradecemos por colaborar com nossa cidade!");
-                that.props.navigation.navigate('Home');
+                that.props.navigation.navigate('App');
               }}
               validationSchema={validationSchema}
             >

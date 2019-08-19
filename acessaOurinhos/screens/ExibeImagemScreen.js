@@ -41,7 +41,7 @@ export default class ExibeImagemScreen extends React.Component {
                             <Button
                                 disabled={this.state.isLoading}
                                 large
-                                title='Cancelar'
+                                title='Tirar outra Foto'
                                 onPress={() => this.props.navigation.navigate('Capture')}
                             />
                         </View>

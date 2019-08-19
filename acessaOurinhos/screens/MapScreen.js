@@ -18,7 +18,7 @@ import * as Permissions from 'expo-permissions';
 import MapView, { Marker } from 'react-native-maps';
 import firebase from 'firebase';
 
-function getRandomInt(min, max) {
+function getRandomInt(min, max) { 
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
@@ -136,8 +136,9 @@ export default class MapScreen extends React.Component {
       storageBucket: "trabgrad-66a7f.appspot.com",
       messagingSenderId: "606095334755"
     };
-
+    if (!firebase.apps.length) {
     return firebase.initializeApp(firebaseConfig);
+    }
   }
 
   componentDidMount() {
@@ -158,7 +159,7 @@ export default class MapScreen extends React.Component {
         ]
       });
       //this.forceUpdate();
-      this.props.navigation.navigate('Reclamacoes', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
+      this.props.navigation.navigate('Capture', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
     }catch(e){
       console.log(e);
     }
