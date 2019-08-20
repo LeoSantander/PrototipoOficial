@@ -400,21 +400,21 @@ export default class InsertCalcadaScreen extends React.Component {
                                   source={
                                     value.value == 'Árvores' ?
                                       require("../assets/images/icones/arvore.png") :
-                                    value.value == 'Cobertura nos pontos de ônibus' ?
-                                      require("../assets/images/icones/onibus.png") :
-                                    value.value == 'Iluminação pública' ?
-                                      require("../assets/images/icones/luz.png") :
-                                    value.value == 'Obstáculos' ?
-                                      require("../assets/images/icones/Entulho.png") :
-                                    value.value == 'Piso' ?
-                                      require("../assets/images/icones/calcada.png") :
-                                    value.value == 'Placas, lixeiras, postes e outros' ?
-                                      require("../assets/images/icones/Lixeira.png") :
-                                    value.value == 'Pontos de ônibus' ?
-                                      require("../assets/images/icones/onibus.png") :
-                                    value.value == 'Rampas' ?
-                                      require("../assets/images/icones/Rampa.png") :
-                                        require("../assets/images/icones/Placas.png")}>
+                                      value.value == 'Cobertura nos pontos de ônibus' ?
+                                        require("../assets/images/icones/onibus.png") :
+                                        value.value == 'Iluminação pública' ?
+                                          require("../assets/images/icones/luz.png") :
+                                          value.value == 'Obstáculos' ?
+                                            require("../assets/images/icones/Entulho.png") :
+                                            value.value == 'Piso' ?
+                                              require("../assets/images/icones/calcada.png") :
+                                              value.value == 'Placas, lixeiras, postes e outros' ?
+                                                require("../assets/images/icones/Lixeira.png") :
+                                                value.value == 'Pontos de ônibus' ?
+                                                  require("../assets/images/icones/onibus.png") :
+                                                  value.value == 'Rampas' ?
+                                                    require("../assets/images/icones/Rampa.png") :
+                                                    require("../assets/images/icones/Placas.png")}>
 
                                 </Image>
                                 <Text style={{ fontSize: 18, paddingTop: 10, marginLeft: 5, width: SCREENWIDTH - 80 }}>{value.title}</Text>
@@ -492,11 +492,11 @@ export default class InsertCalcadaScreen extends React.Component {
                   </View>
 
                   <TouchableOpacity style={styles.botaoAzul} onPress={formikProps.handleSubmit}>{this.props.type}
-                          <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
-                            <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/enviar.png")}></Image>
-                            <Text style={{ color: '#FFFFFF', marginLeft: 10, fontSize: 18 }}>Enviar</Text>
-                          </View>
-                        </TouchableOpacity>    
+                    <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                      <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/enviar.png")}></Image>
+                      <Text style={{ color: '#FFFFFF', marginLeft: 10, fontSize: 18 }}>Enviar</Text>
+                    </View>
+                  </TouchableOpacity>
                 </React.Fragment>
               )}
             </Formik>
