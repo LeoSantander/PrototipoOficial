@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -491,12 +491,12 @@ export default class InsertCalcadaScreen extends React.Component {
                     </Text>
                   </View>
 
-                  <View style={{ marginHorizontal: 20, marginVertical: 5 }}>
-                    <Button
-                      title="Enviar"
-                      icon={{ name: 'check', type: 'font-awesome' }}
-                      onPress={formikProps.handleSubmit} />
-                  </View>
+                  <TouchableOpacity style={styles.botaoAzul} onPress={formikProps.handleSubmit}>{this.props.type}
+                          <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                            <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/enviar.png")}></Image>
+                            <Text style={{ color: '#FFFFFF', marginLeft: 10, fontSize: 18 }}>Enviar</Text>
+                          </View>
+                        </TouchableOpacity>    
                 </React.Fragment>
               )}
             </Formik>
@@ -535,6 +535,15 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     padding: 10,
     marginBottom: 3,
+  },
+  botaoAzul: {
+    alignSelf: 'center',
+    backgroundColor: '#0984ec',
+    width: SCREENWIDTH - 60,
+    borderRadius: 60,
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   }
 });
 

@@ -11,7 +11,8 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   TouchableHighlight,
-  StyleSheet
+  StyleSheet,
+  Image
 } from 'react-native';
 import { Formik } from 'formik';
 import { Button } from 'react-native-elements';
@@ -294,7 +295,7 @@ export default class InsertRuaScreen extends React.Component {
 
             <Text style={styles.welcome}>Ruas</Text>
             <Formik
-              initialValues={{ endereco: '', problema: 'Ruas', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude, Download:''}}
+              initialValues={{ endereco: '', problema: 'Ruas', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude, Download: '' }}
               onSubmit={(values, actions) => {
 
                 var that = this;
@@ -354,7 +355,7 @@ export default class InsertRuaScreen extends React.Component {
                           }}>Escolha Um problema</Text>
                           {pickerProblema.map((value, index) => {
 
-                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address); ; formikProps.setFieldValue('Download', Download) }} style={{
+                            return <TouchableHighlight key={index} onPress={() => { this.setPickerValue(value.value); this.mudaPicker(value.value); formikProps.setFieldValue('especificacao', value.value); formikProps.setFieldValue('endereco', this.state.address);; formikProps.setFieldValue('Download', Download) }} style={{
                               paddingTop: 4, paddingBottom: 4, alignItems: 'center',
                               justifyContent: 'center',
                             }}>
@@ -435,12 +436,12 @@ export default class InsertRuaScreen extends React.Component {
                     {formikProps.isSubmitting ? (
                       <ActivityIndicator />
                     ) : (
-                        <Button 
-                          title="Enviar" 
-                          icon={{ name: 'check', type: 'font-awesome' }}
-                          onPress={formikProps.handleSubmit} />
-
-                      )}
+                        <TouchableOpacity style={styles.botaoAzul} onPress={formikProps.handleSubmit}>{this.props.type}
+                          <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                            <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/enviar.png")}></Image>
+                            <Text style={{ color: '#FFFFFF', marginLeft: 10, fontSize: 18 }}>Enviar</Text>
+                          </View>
+                        </TouchableOpacity>    )}
                   </View>
                 </React.Fragment>
               )}
@@ -480,6 +481,15 @@ const styles = StyleSheet.create({
     borderColor: '#ddd',
     padding: 10,
     marginBottom: 3,
+  },
+  botaoAzul: {
+    alignSelf: 'center',
+    backgroundColor: '#0984ec',
+    width: SCREENWIDTH - 60,
+    borderRadius: 60,
+    alignContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   }
 });
 

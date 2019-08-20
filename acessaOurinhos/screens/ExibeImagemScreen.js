@@ -38,25 +38,24 @@ export default class ExibeImagemScreen extends React.Component {
                         />
 
                         <View style={{ marginTop: 20, marginLeft: 10, marginRight: 10 }}>
-                            <Button
-                                disabled={this.state.isLoading}
-                                large
-                                title='Tirar outra Foto'
-                                onPress={() => this.props.navigation.navigate('Capture')}
-                            />
+                            <TouchableOpacity style={styles.botaoAzul} onPress={() => this.uploadImage(latitude, longitude, photo.uri)}>{this.props.type}
+                                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                                    <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/save.png")}></Image>
+                                    <Text style={{ color: '#FFFFFF', marginLeft: 10, fontSize: 18 }}>Enviar Foto</Text>
+                                </View>
+                            </TouchableOpacity>
                         </View>
 
-                        <View style={{ marginTop: 20, marginBottom: 20, marginLeft: 10, marginRight: 10 }}>
-                            <Button
-                                disabled={this.state.isLoading}
-                                large
-                                icon={{ name: 'save', type: 'font-awesome' }}
-                                title='Salvar'
-                                onPress={() => this.uploadImage(latitude, longitude, photo.uri)}
-                            />
+                        <View style={{ marginTop: 5, marginBottom: 20, marginLeft: 10, marginRight: 10 }}>
+                        <TouchableOpacity style={{ marginLeft: 50, marginRight: 50, alignSelf: 'center', marginTop: 15 }} onPress={() => this.props.navigation.navigate('Capture')}>{this.props.type}
+                            <View style={{ flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/cancel.png")}></Image>
+                                <Text style={{ paddingTop: 5, color: '#0984ec', marginLeft: 10, }}>Tirar outra Foto</Text>
+                            </View>
+                        </TouchableOpacity>
                         </View>
                     </ScrollView>
-                </View>
+                </View >
             );
         } else {
             return (
@@ -133,4 +132,13 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
     },
+    botaoAzul: {
+        alignSelf: 'center',
+        backgroundColor: '#0984ec',
+        width: SCREENWIDTH - 60,
+        borderRadius: 60,
+        alignContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    }
 });
