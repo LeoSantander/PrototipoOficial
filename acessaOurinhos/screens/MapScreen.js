@@ -293,7 +293,7 @@ MapScreen.navigationOptions = {
       )}
 
     >
-      <Image style={{ width: 25, height: 25, marginRight: 5, }} source={require("../assets/images/icons/infoblue.png")} />
+      <Image style={{ width: 25, height: 25, marginRight: 5, }} source={require("../assets/images/icons/infob.png")} />
     </TouchableOpacity>
   ),
 };
