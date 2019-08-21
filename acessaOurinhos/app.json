@@ -28,7 +28,12 @@
       "bundleIdentifier": "com.projeto.acessaourinhos"
     },
     "android": {
-      "package": "com.projeto.acessaourinhos"
+      "package": "com.projeto.acessaourinhos",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY"
+        }
+      }
       }
   }
 }
