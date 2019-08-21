@@ -234,8 +234,13 @@ export default class InsertRuaScreen extends React.Component {
     const { navigation } = this.props;
     const latitude = navigation.getParam('latitude');
     const longitude = navigation.getParam('longitude');
-    const Download = navigation.getParam('link');
+    const Teste = navigation.getParam('link');
 
+    if (Teste === undefined){
+      var Download = 'n';
+    } else{
+      var Download = Teste; 
+    }
 
     // set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
     Geocode.setApiKey("AIzaSyBJAdP_K_rJ6xwNa2TmMSlhSv_-2Ta1-GY");
