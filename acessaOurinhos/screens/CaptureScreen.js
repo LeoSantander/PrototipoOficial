@@ -78,7 +78,7 @@ export default class CaptureScreen extends React.Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={{ marginLeft: 50, marginRight: 50, alignSelf: 'center', marginTop: 15 }} onPress={() => this.props.navigation.navigate('Mapa')}>{this.props.type}
+                        <TouchableOpacity style={{ marginLeft: 50, marginRight: 50, alignSelf: 'center', marginTop: 15 }} onPress={() => this.props.navigation.navigate('MapStack')}>{this.props.type}
                             <View style={{ flexDirection: 'row', alignSelf: 'flex-start' }}>
                                 <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/cancel.png")}></Image>
                                 <Text style={{ paddingTop: 5, color: '#0984ec', marginLeft: 10, }}>Cancelar</Text>
