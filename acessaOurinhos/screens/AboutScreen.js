@@ -11,11 +11,17 @@ import {
   Dimensions
 } from 'react-native';
 
+const { height, width } = Dimensions.get('window');
+
+const SCREENHEIGHT = height;
+const SCREENWIDTH = width - 30;
+
+
 export default class AboutScreen extends React.Component {
   render() {
     return (
       <ScrollView>
-        <View>
+        <View> 
           <View style={{ flexDirection: 'row', alignSelf: 'flex-start' }}>
             <Image style={{ marginLeft: 15, width: 100, height: 100 }} source={require("../assets/images/robot-prod.png")}></Image>
             <View>
@@ -41,7 +47,7 @@ export default class AboutScreen extends React.Component {
           <View style={{ backgroundColor: '#e7e6e2', marginTop: 10 }}>
             <Text style={{ marginLeft: 15, fontSize: 16, fontWeight: 'bold'}}>Membros</Text>
           </View>
-          <View style={{ flexDirection: 'row', alignSelf: 'flex-start' }}>
+          <Image style={{ marginLeft: 15, width: 100, height: 40, marginTop: 20, alignSelf: 'center' }} source={require("../assets/images/fatec.png")}></Image>
             <View>
               <View style={{ marginTop: 10 }}>
                 <Text style={{ marginLeft: 15, fontSize: 14, marginRight: 10, textAlign: 'justify', fontWeight: 'bold' }}>
@@ -58,10 +64,7 @@ export default class AboutScreen extends React.Component {
             </Text>
               </View>
             </View >
-            <Image style={{ marginLeft: 15, width: 100, height: 40, marginTop: 20 }} source={require("../assets/images/fatec.png")}></Image>
-          </View>
-          <View style={{ flexDirection: 'row', alignSelf: 'flex-start', marginTop: 20 }}>
-            <Image style={{ marginLeft: 15, width: 100, height: 30, marginTop: 20 }} source={require("../assets/images/unesp.png")}></Image>
+            <Image style={{ marginLeft: 15, width: 100, height: 30, marginTop: 20, alignSelf: 'center' }} source={require("../assets/images/unesp.png")}></Image>
             <View>
               <View style={{ marginTop: 10 }}>
                 <Text style={{ marginLeft: 15, fontSize: 14, marginRight: 10, textAlign: 'justify', fontWeight: 'bold' }}>
@@ -82,7 +85,6 @@ export default class AboutScreen extends React.Component {
               </View>
             </View >
           </View>
-        </View>
       </ScrollView>
     )
   }
