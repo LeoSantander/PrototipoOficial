@@ -18,7 +18,7 @@ import * as Permissions from 'expo-permissions';
 import MapView, { Marker } from 'react-native-maps';
 import firebase from 'firebase';
 
-function getRandomInt(min, max) { 
+function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min)) + min;
@@ -114,16 +114,23 @@ export default class MapScreen extends React.Component {
 
     that._isMounted = true;
 
-    var rootRef = firebase.database().ref();
-    var ref = rootRef.child("users");
+    //var rootRef = firebase.database().ref();
+    //var ref = rootRef.child("users");
+    //var ref = rootRef.child("Reclamacoes");
 
-    ref.once("value").then(function (snapshot) {
-      var data = snapshot.exportVal();
-
-      if (that._isMounted) {
-        that.setState({ places: data });
-        that.setState({ isLoading: false });
-      }
+    var query = firebase.database().ref("Reclamacoes");
+    //let query = firebaseDatabase.ref(nodePath).limitToLast(size);
+    query.on('value', dataSnapshot => {
+      let items = [];
+      dataSnapshot.forEach(childSnapshot => {
+        let item = childSnapshot.val();
+        item['key'] = childSnapshot.key;
+        items.push(item);
+      });
+      //console.log("Teste" + items + "Teste");
+      that.setState({ places: items });
+      //console.log("LISTA" + this.state.lista + "FIM LISTA");
+      that.setState({ isLoading: false });
     });
   }
 
@@ -137,7 +144,7 @@ export default class MapScreen extends React.Component {
       messagingSenderId: "606095334755"
     };
     if (!firebase.apps.length) {
-    return firebase.initializeApp(firebaseConfig);
+      return firebase.initializeApp(firebaseConfig);
     }
   }
 
@@ -148,7 +155,7 @@ export default class MapScreen extends React.Component {
   }
 
   handlePress(e) {
-    try{
+    try {
       this.setState({
         markers: [
           ...this.state.markers,
@@ -160,10 +167,10 @@ export default class MapScreen extends React.Component {
       });
       //this.forceUpdate();
       this.props.navigation.navigate('Capture', { latitude: e.nativeEvent.coordinate.latitude, longitude: e.nativeEvent.coordinate.longitude })
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
-      
+
   }
 
   componentWillUnmount() {
@@ -187,10 +194,36 @@ export default class MapScreen extends React.Component {
         </View>
       );
     }
+    else if (this.state.places.length == 0) {
+      return (
+        <View style={styles.container}>
 
+          <MapView
+            ref={map => this.mapView = map}
+            region={this.state.initialPosition}
+            onPress={this.handlePress}
+            style={styles.MapView}
+          >
+            <MapView.Marker
+              coordinate={this.state.markerPosition}
+            >
+              <View style={styles.radius}>
+                <View style={styles.marker} />
+              </View>
+            </MapView.Marker>
+
+          </MapView>
+          <Image source={require('../assets/images/legenda.png')} style={{ width: SCREENWIDTH / 2, height: SCREENWIDTH / 2, position: 'absolute', bottom: 0, }} />
+        </View>
+
+      );
+    }
     else {
 
-      const array = Object.values(this.state.places);
+      const tra = Object.values(this.state.places);
+      var array = tra.slice(0).reverse();
+
+      //console.log(meuArrayInvertido);
       const { latitude, longitude } = array[0];
 
       return (
@@ -256,7 +289,7 @@ export default class MapScreen extends React.Component {
                           style={{ width: SCREENWIDTH - 20, height: SCREENHEIGHT / 2 - 20 }}
                           source={{ uri: place.Download }}
                         /> : <Image
-                            style={{ width: SCREENWIDTH - 150, height: SCREENHEIGHT / 2 - 150,alignSelf:'center' }}
+                            style={{ width: SCREENWIDTH - 150, height: SCREENHEIGHT / 2 - 150, alignSelf: 'center' }}
                             source={require('../assets/images/icon-logo.png')}
                           />
                       }

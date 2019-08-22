@@ -211,6 +211,15 @@ export default class InsertPredioScreen extends React.Component {
     const longitude = navigation.getParam('longitude');
     const Teste = navigation.getParam('link');
 
+    var date = new Date().getDate(); //Current Date
+    var month = new Date().getMonth() + 1; //Current Month
+    var year = new Date().getFullYear(); //Current Year
+    var hours = new Date().getHours(); //Current Hours
+    var min = new Date().getMinutes(); //Current Minutes
+    var sec = new Date().getSeconds(); //Current Seconds
+
+    var data = date + '/' + month + '/' + year + ' ' + hours + ':' + min + ':' + sec;
+
     if (Teste === undefined) {
       var Download = 'n';
     } else {
@@ -265,7 +274,7 @@ export default class InsertPredioScreen extends React.Component {
 
             <Text style={styles.welcome}>Prédios Públicos e praças</Text>
             <Formik
-              initialValues={{ endereco: '', problema: 'Prédios Públicos e praças', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude, Download: '' }}
+              initialValues={{ endereco: '', problema: 'Prédios Públicos e praças', especificacao: '', detalhe: '', observacao: '', latitude: latitude, longitude: longitude, Download: '', dataInclusao: data }}
               onSubmit={(values, actions) => {
 
                 var that = this;
@@ -273,19 +282,23 @@ export default class InsertPredioScreen extends React.Component {
                 that._isMounted = true;
 
                 var rootRef = firebase.database().ref();
+                var reclamacoesRef = rootRef.child("Reclamacoes");
+
+                var novaReclamacaoRef = reclamacoesRef.push();
+                novaReclamacaoRef.set(values);
 
                 //alert(JSON.stringify(values));
-                var ref = rootRef.child("users");
-                var contador = 0;
+                //var ref = rootRef.child("users");
+                //var contador = 0;
 
-                ref.once("value").then(function (snapshot) {
-                  snapshot.forEach(function (childSnapshot) {
-                    contador++;
-                    //console.log("**Contador: ",contador);
-                  });
+                //ref.once("value").then(function (snapshot) {
+                //snapshot.forEach(function (childSnapshot) {
+                //contador++;
+                //console.log("**Contador: ",contador);
+                //});
 
-                  ref.child(contador).set(values);
-                });
+                //ref.child(contador).set(values);
+                //});
 
                 setTimeout(() => {
                   actions.setSubmitting(false);
@@ -399,7 +412,7 @@ export default class InsertPredioScreen extends React.Component {
                                             require("../assets/images/icones/ausencia.png") :
                                             value.value == 'Falta de conservação' ?
                                               require("../assets/images/icones/faltaconservacao.png") :
-                                                require("../assets/images/icones/irregular.png")}>
+                                              require("../assets/images/icones/irregular.png")}>
 
                                       </Image>
                                       <Text style={{ fontSize: 18, paddingTop: 10, marginLeft: 5, width: SCREENWIDTH - 80 }}>{value.title}</Text>

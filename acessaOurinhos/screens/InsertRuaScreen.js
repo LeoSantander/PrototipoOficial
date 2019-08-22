@@ -308,19 +308,23 @@ export default class InsertRuaScreen extends React.Component {
                 that._isMounted = true;
 
                 var rootRef = firebase.database().ref();
+                var reclamacoesRef = rootRef.child("Reclamacoes");
 
+                var novaReclamacaoRef = reclamacoesRef.push();
+                novaReclamacaoRef.set(values);
+                
                 //alert(JSON.stringify(values));
-                var ref = rootRef.child("users");
-                var contador = 0;
+                //var ref = rootRef.child("users");
+                //var contador = 0;
 
-                ref.once("value").then(function (snapshot) {
-                  snapshot.forEach(function (childSnapshot) {
-                    contador++;
+                //ref.once("value").then(function (snapshot) {
+                  //snapshot.forEach(function (childSnapshot) {
+                   // contador++;
                     //console.log("**Contador: ",contador);
-                  });
+                  //});
 
-                  ref.child(contador).set(values);
-                });
+                  //ref.child(contador).set(values);
+                //});
 
                 setTimeout(() => {
                   actions.setSubmitting(false);
