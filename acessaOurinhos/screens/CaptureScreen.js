@@ -3,6 +3,9 @@ import { Text, View, TouchableOpacity, StyleSheet, Alert, Dimensions, Image, Scr
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import { Button } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+
 
 const { height, width } = Dimensions.get('window');
 
@@ -14,11 +17,19 @@ export default class CaptureScreen extends React.Component {
     state = {
         hasCameraPermission: null,
         type: Camera.Constants.Type.back,
+        image: '',
+        anexar: 'N',
     };
 
     async componentDidMount() {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
         this.setState({ hasCameraPermission: status === 'granted' });
+        if (Constants.platform.ios) {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status !== 'granted') {
+                alert('Desculpe, mas para isso funcionar precisamos de permissão para acessar sua galeria!');
+            }
+        }
     }
 
     takePicture = async (latitude, longitude) => {
@@ -29,6 +40,20 @@ export default class CaptureScreen extends React.Component {
         }
     }
 
+    _pickImage = async (latitude, longitude) => {
+        let photo = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+        });
+
+        console.log(photo);
+
+        if (!photo.cancelled) {
+            this.props.navigation.navigate('ExibeImagem', { photo, latitude, longitude });
+        }
+    };
+
     render() {
 
         const { hasCameraPermission } = this.state;
@@ -38,17 +63,29 @@ export default class CaptureScreen extends React.Component {
             return <Text>Sem Acesso a Câmera! </Text>;
         } else {
 
-            Alert.alert(
-                'Deseja Mesmo Enviar uma Foto?',
-                'Enviar uma foto é opciona, você Deseja Continuar?',
-                [
-                    { text: 'Enviar um Foto', onPress: () => console.log('OK Pressed') },
-                    { text: 'Não Enviar', onPress: () => this.props.navigation.navigate('Buttons', { latitude, longitude }) },
-                ]);
-
             const { navigation } = this.props;
             const latitude = navigation.getParam('latitude');
             const longitude = navigation.getParam('longitude');
+
+            if (this.state.anexar == 'N') {
+                Alert.alert(
+                    'Anexar uma Foto?',
+                    'Enviar uma foto é opcional, você também pode continuar o processo sem adicionar, escolha uma opção:',
+                    [
+                        { text: 'Anexar uma Foto', onPress: () => this.setState({ anexar: 'S' }) },
+                        { text: 'Continuar sem anexar uma Foto', onPress: () => () => this.props.navigation.navigate('Buttons', { latitude, longitude }) },
+                    ]);
+            };
+
+            if (this.state.anexar == 'S') {
+                Alert.alert(
+                    'Escolha Uma Opção',
+                    'Escolha de onde será enviada: ',
+                    [
+                        { text: 'Capturar uma Foto', onPress: () => console.log('OK Pressed') },
+                        { text: 'Enviar a Partir da Galeria', onPress: () => this._pickImage(latitude, longitude) },
+                    ]);
+            };
 
             return (
                 <View style={{ flex: 1 }}>
@@ -101,7 +138,7 @@ const styles = StyleSheet.create({
     botaoAzul: {
         alignSelf: 'center',
         backgroundColor: '#0984ec',
-        width: SCREENWIDTH - 60,
+        width: SCREENWIDTH,
         borderRadius: 60,
         alignContent: 'center',
         alignItems: 'center',

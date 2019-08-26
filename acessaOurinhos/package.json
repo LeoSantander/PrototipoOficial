@@ -20,6 +20,7 @@
     "expo-camera": "^6.0.0",
     "expo-constants": "6.0.0",
     "expo-font": "~6.0.0",
+    "expo-image-picker": "^6.0.0",
     "expo-web-browser": "6.0.0",
     "firebase": "^6.3.4",
     "formik": "^1.5.8",
