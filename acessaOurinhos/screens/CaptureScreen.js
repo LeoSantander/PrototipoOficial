@@ -73,7 +73,7 @@ export default class CaptureScreen extends React.Component {
                     'Enviar uma foto é opcional, você também pode continuar o processo sem adicionar, escolha uma opção:',
                     [
                         { text: 'Anexar uma Foto', onPress: () => this.setState({ anexar: 'S' }) },
-                        { text: 'Continuar sem anexar uma Foto', onPress: () => () => this.props.navigation.navigate('Buttons', { latitude, longitude }) },
+                        { text: 'Continuar sem anexar uma Foto', onPress: () => this.props.navigation.navigate('Buttons', { latitude, longitude }) },
                     ]);
             };
 
