@@ -19,6 +19,7 @@ export default class CaptureScreen extends React.Component {
         type: Camera.Constants.Type.back,
         image: '',
         anexar: 'N',
+        bloquear: false,
     };
 
     async componentDidMount() {
@@ -33,7 +34,10 @@ export default class CaptureScreen extends React.Component {
     }
 
     takePicture = async (latitude, longitude) => {
+        this.setState({ bloquear: true });
+        console.log(this.state.bloquear);
         if (this.camera) {
+            
             photo = await this.camera.takePictureAsync();
             console.log('Tem Valor?: ' + latitude + '_' + longitude)
             this.props.navigation.navigate('ExibeImagem', { photo, latitude, longitude });
@@ -55,7 +59,6 @@ export default class CaptureScreen extends React.Component {
     };
 
     render() {
-
         const { hasCameraPermission } = this.state;
         if (hasCameraPermission === null) {
             return <View />;
@@ -67,7 +70,7 @@ export default class CaptureScreen extends React.Component {
             const latitude = navigation.getParam('latitude');
             const longitude = navigation.getParam('longitude');
 
-            if (this.state.anexar == 'N') {
+            if (this.state.anexar == 'N' && this.state.bloquear==false) {
                 Alert.alert(
                     'Anexar uma Foto?',
                     'Enviar uma foto é opcional, você também pode continuar o processo sem adicionar, escolha uma opção:',
@@ -77,7 +80,7 @@ export default class CaptureScreen extends React.Component {
                     ]);
             };
 
-            if (this.state.anexar == 'S') {
+            if (this.state.anexar == 'S' && this.state.bloquear==false) {
                 Alert.alert(
                     'Escolha Uma Opção',
                     'Escolha de onde será enviada: ',
@@ -108,7 +111,7 @@ export default class CaptureScreen extends React.Component {
                     </Camera>
                     <View style={{ marginLeft: 10, marginRight: 10, marginBottom: 50 }}>
 
-                        <TouchableOpacity style={styles.botaoAzul} onPress={() => this.takePicture(latitude, longitude)}>{this.props.type}
+                        <TouchableOpacity en style={styles.botaoAzul} onPress={() => this.takePicture(latitude, longitude)} disabled={this.state.bloquear}>{this.props.type }
                             <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                 <Image style={{ width: 25, height: 25 }} source={require("../assets/images/icons/camera.png")}></Image>
                                 <Text style={{ color: '#FFFFFF', marginLeft: 10, fontSize: 18 }}>Capturar</Text>
